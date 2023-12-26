@@ -1,4 +1,4 @@
-# magicarray
+# MagicArray 
 NO care type, no care struct, easy to sort and aggregation.similar with php array structure,easy to deal for data process. Coding shortly,process automatically.
 in magicarray, no nil forever.
 ```shell
@@ -37,6 +37,32 @@ go get github.com/lingdor/magicarray
 | Append                      | Append value to Magic                                                               |
 | Set                         | Set value of MagicArray                                                             | 
 | Remove                      | Remove item from the MagicArray                                                     |
+
+# Recommend
+1. Recommend use the 'arr' alias name to import package with:
+```go
+import(
+arr "github.com/lingdor/magicarray"
+)
+```
+2. Iterator to loop the array, for example:
+```go
+ma := arr.ValueofStruct(IteratorInfo{
+Field1: "field1",
+Field2: 2,
+Field3: true,
+})
+iter := ma.Iter()
+for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
+fmt.Printf("%s=%s\n", k.String(), v.String())
+}
+```
+output:
+```
+Field1=field1
+Field2=2
+Field3=true
+```
 
 # Hello world
 
