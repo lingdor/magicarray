@@ -32,8 +32,8 @@ func Values(arr MagicArray) MagicArray {
 	return arr.Values()
 }
 
-// Gets make a MagicArray , remains the keys maps and sort
-func Gets(arr MagicArray, keys ...any) MagicArray {
+// Pick Pick the keys and values to a new MagicArray for parameter keys order
+func Pick(arr MagicArray, keys ...any) MagicArray {
 	if arr.IsKeys() {
 		var retKeys = make([]string, 0, len(keys))
 		var retVals = make([]api.ZVal, 0, len(keys))

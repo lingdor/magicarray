@@ -1,5 +1,6 @@
 package magicarray
 
+// Merge fields from parameters to MagicArray
 func Merge(arr MagicArray, args ...any) (MagicArray, error) {
 
 	var setter MagicArray = ToWriter(arr)
@@ -21,15 +22,20 @@ func Merge(arr MagicArray, args ...any) (MagicArray, error) {
 	}
 	return setter, nil
 }
+
+// Append value to Magic
 func Append(arr MagicArray, val any) MagicArray {
 	return ToWriter(arr).Append(val)
 }
+
+// Set value of MagicArray
 func Set(arr MagicArray, key, val any) MagicArray {
 	setter := ToWriter(arr)
 	setter = setter.Set(key, val)
 	return setter
 }
 
+// Remove item from the MagicArray
 func Remove(arr MagicArray, keys ...any) MagicArray {
 
 	writeArr := ToWriter(arr)

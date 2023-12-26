@@ -82,13 +82,14 @@ func Sum(arr MagicArray) ZVal {
 	return retVal
 }
 
-// In check key is in MagicArray
-func In(arr MagicArray, keys ...any) bool {
+// In check value is in MagicArray
+func In(arr MagicArray, value any) bool {
 
-	for _, k := range keys {
-		if get := arr.Get(k); !get.IsSet() {
-			return false
+	iter := arr.Iter()
+	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
+		if val.Compare(zval.NewZVal(value)) {
+			return true
 		}
 	}
-	return true
+	return false
 }
