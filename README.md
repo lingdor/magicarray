@@ -66,7 +66,7 @@ type AreaDto struct {
 	City   string
 }
 
-func dtosCommand() {
+func main() {
 
 	user := UserDTO{
 		Id:   1,
