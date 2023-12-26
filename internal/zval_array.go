@@ -167,9 +167,6 @@ func (m *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 
 	if val, exists := m.mapVals[zvalKey.String()]; exists {
 		m.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: val.index}
-		//if m.isSorted {
-		//	m.keys[val.index] = zvalKey.String()
-		//}
 	} else {
 		m.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: m.Len()}
 		if m.isSorted {

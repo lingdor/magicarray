@@ -34,7 +34,7 @@ func dtosCommand() {
 	}
 	area := AreaDto{
 		CityId: 10000,
-		City:   "北京",
+		City:   "beij",
 	}
 
 	mix, _ := arr.Merge(arr.ValueofStruct(user), score, area)

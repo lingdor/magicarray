@@ -14,22 +14,15 @@ type UserEntity struct {
 
 func tagCommand() {
 
-	users := []UserEntity{
-		{
-			Id:       1,
-			UserName: "Bobby",
-			IsMale:   true,
-		},
-		{
-			Id:       2,
-			UserName: "Lily",
-			IsMale:   false,
-		},
+	users := UserEntity{
+		Id:       1,
+		UserName: "Bobby",
+		IsMale:   true,
 	}
 
-	usersArr := arr.ValueOfSlice(users)
-	usersArr = arr.WashColumnTag(usersArr, arr.WashTagJsonInitalLowerOpt())
-	if bs, err := json.Marshal(usersArr); err == nil {
+	userArr := arr.ValueofStruct(users)
+	userArr = arr.SetTag(userArr, "Id", "json", "UserId")
+	if bs, err := json.Marshal(userArr); err == nil {
 		fmt.Println(string(bs))
 	} else {
 		panic(err)

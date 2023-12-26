@@ -26,7 +26,7 @@ func Append(arr MagicArray, val any) MagicArray {
 }
 func Set(arr MagicArray, key, val any) MagicArray {
 	setter := ToWriter(arr)
-	setter.Set(key, val)
+	setter = setter.Set(key, val)
 	return setter
 }
 
