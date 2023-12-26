@@ -98,7 +98,7 @@ output:
 ```
 
 # examples
-More of examples, visit _examples/ in my repository. 
+More of examples, visit [_examples/](https://github.com/lingdor/magicarray/tree/main/_examples) in my repository. 
 
 thanks!
 
