@@ -12,6 +12,10 @@ type StructArrayIterator struct {
 	keys  []string
 }
 
+func (s *StructArrayIterator) Index() int {
+	return s.index
+}
+
 func (i *StructArrayIterator) currentKV() (api.ZVal, api.ZVal) {
 	if i.index < i.arr.Len() {
 		key := i.keys[i.index]

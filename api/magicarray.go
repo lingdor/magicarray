@@ -14,6 +14,7 @@ type Iterator interface {
 	//NextKey() ZVal todo
 	NextVal() ZVal
 	FirstVal() ZVal
+	Index() int
 }
 type Len interface {
 	Len() int

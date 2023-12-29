@@ -12,6 +12,10 @@ type ZValArrayIterator struct {
 	arr        *ZValArray
 }
 
+func (z *ZValArrayIterator) Index() int {
+	return z.iteratePos
+}
+
 func (z *ZValArrayIterator) NextKV() (api.ZVal, api.ZVal) {
 	z.iteratePos++
 	return z.currentKV()

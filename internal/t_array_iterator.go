@@ -11,6 +11,10 @@ type TArrayIterator[T any] struct {
 	arr   TArray[T]
 }
 
+func (t *TArrayIterator[T]) Index() int {
+	return t.index
+}
+
 func (t *TArrayIterator[T]) currentKV() (api.ZVal, api.ZVal) {
 	if t.index < t.arr.Len() {
 		return zval.NewZValOfKind(kind.Int, t.index), zval.NewZVal(t.arr[t.index])

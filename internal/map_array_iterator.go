@@ -12,6 +12,10 @@ type MapArrayIterator struct {
 	keys  []any
 }
 
+func (m *MapArrayIterator) Index() int {
+	return m.index
+}
+
 func (i *MapArrayIterator) currentKV() (api.ZVal, api.ZVal) {
 	if i.index < i.arr.Len() {
 		key := i.keys[i.index]
