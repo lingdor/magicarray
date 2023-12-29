@@ -5,42 +5,42 @@ in magicarray, no nil forever.
 go get github.com/lingdor/magicarray
 ```
 # Functions
-| Name                        | Describe                                                                            |
-|-----------------------------|-------------------------------------------------------------------------------------|
-| Makeof                      | Make a MagicArray instance from struct,slice,array,map                              |
-| ValueofStruct               | Make a MagicArray instance from struct, performance better than Makeof.             |
-| ValueOfSlice                | Make a MagicArray instance from Slice or array, performance better than Makeof      |
-| ValueofStructs              | Make a MagicArray instance from Structs, performance better than Makeof             |
-| MustValueof                 | Make a MagicArray instance like Makeof,If return error than panic.                  |
-| Make                        | Make a empty MagicArray instance                                                    |
-| Equals                      | Return If lenth equal and key and value equals                                      |
-| Max                         | Get the maximum  numberic value from the array                                      |
-| Min                         | Get the minmum numeric value from the array                                         |
-| Sum                         | Calculate sum the total numeric  values from the array                              |
-| In                          | check value is in MagicArray                                                        |
-| ToStringList                | translate the MagicArray to string array                                            |
-| ToIntList                   | translate the MagicArray to integer array                                           |
-| ToAnyList                   | translate the MagicArray to any type of array                                       |
-| ToMap                       | translate the MagicArray to map                                                     |
-| Column                      | Pick the Column from the two-dimensional table data                                 |
-| Len                         | Get length of the MagicArray                                                        | 
-| Get                         | Get item from the MagicArray                                                        |
-| Keys                        | Get keys of the MagicArray                                                          |
-| Values                      | Get values of the MagicArray                                                        |
-| Pick                        | Pick the keys and values to a new MagicArray for parameter keys order               |
-| SetColumnTag                | Set tags of key column                                                              |
-| WashColumn                  | Wash the value of MagicArray column by rules                                        |
-| SetTag                      | Set tag key and value to the value of MagicArray                                    |
-| WashAll                     | Wash the value of MagicArray all values by rules                                    |
-| WashTagRuleJsonInitialLower | Wash the value tags ,lower the initial letter if no fund the json tag               |
-| Merge                       | Merge fields from parameters to MagicArray                                          |
-| Append                      | Append value to Magic                                                               |
-| Set                         | Set value of MagicArray                                                             | 
-| Remove                      | Remove item from the MagicArray                                                     |
-| Implode                     | join MagicArray values to a string                                                  |
-| Explode                     | split the string to MagicArray                                                      |
-| JsonEncode                  | write json to IOWriter                                                              |
-| JsonMarshal                 | generate json bytes and return                                                      |
+| Name                              | Describe                                                                            |
+|-----------------------------------|-------------------------------------------------------------------------------------|
+| array.Makeof                      | Make a MagicArray instance from struct,slice,array,map                              |
+| array.ValueofStruct               | Make a MagicArray instance from struct, performance better than Makeof.             |
+| array.ValueOfSlice                | Make a MagicArray instance from Slice or array, performance better than Makeof      |
+| array.ValueofStructs              | Make a MagicArray instance from Structs, performance better than Makeof             |
+| array.MustValueof                 | Make a MagicArray instance like Makeof,If return error than panic.                  |
+| array.Make                        | Make a empty MagicArray instance                                                    |
+| array.Equals                      | Return If lenth equal and key and value equals                                      |
+| array.Max                         | Get the maximum  numberic value from the array                                      |
+| array.Min                         | Get the minmum numeric value from the array                                         |
+| array.Sum                         | Calculate sum the total numeric  values from the array                              |
+| array.In                          | check value is in MagicArray                                                        |
+| array.ToStringList                | translate the MagicArray to string array                                            |
+| array.ToIntList                   | translate the MagicArray to integer array                                           |
+| array.ToAnyList                   | translate the MagicArray to any type of array                                       |
+| array.ToMap                       | translate the MagicArray to map                                                     |
+| array.Column                      | Pick the Column from the two-dimensional table data                                 |
+| array.Len                         | Get length of the MagicArray                                                        | 
+| array.Get                         | Get item from the MagicArray                                                        |
+| array.Keys                        | Get keys of the MagicArray                                                          |
+| array.Values                      | Get values of the MagicArray                                                        |
+| array.Pick                        | Pick the keys and values to a new MagicArray for parameter keys order               |
+| array.SetColumnTag                | Set tags of key column                                                              |
+| array.WashColumn                  | Wash the value of MagicArray column by rules                                        |
+| array.SetTag                      | Set tag key and value to the value of MagicArray                                    |
+| array.WashAll                     | Wash the value of MagicArray all values by rules                                    |
+| array.WashTagRuleJsonInitialLower | Wash the value tags ,lower the initial letter if no fund the json tag               |
+| array.Merge                       | Merge fields from parameters to MagicArray                                          |
+| array.Append                      | Append value to Magic                                                               |
+| array.Set                         | Set value of MagicArray                                                             | 
+| array.Remove                      | Remove item from the MagicArray                                                     |
+| array.Implode                     | join MagicArray values to a string                                                  |
+| array.Explode                     | split the string to MagicArray                                                      |
+| array.JsonEncode                  | write json to IOWriter                                                              |
+| array.JsonMarshal                 | generate json bytes and return                                                      |
 
 # Recommend
 1. Create instance of MagicArray
