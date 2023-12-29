@@ -28,13 +28,13 @@ func NewMapArray(val any, refVal reflect.Value) *MapArray {
 	}
 }
 
-func (s *MapArray) Keys() api.MagicArray {
+func (s *MapArray) Keys() api.IMagicArray {
 	// todo can if map value type to generate difference array
 	keys := s.genKeys()
 	return TArray[any](keys)
 }
 
-func (s *MapArray) Values() api.MagicArray {
+func (s *MapArray) Values() api.IMagicArray {
 	// todo can if map value type to generate difference array
 	var vals = make([]any, 0, s.Len())
 	iter := s.Iter()
@@ -48,11 +48,11 @@ func (s *MapArray) Len() int {
 	return s.refVal.Len()
 }
 
-func (s MapArray) Get(key any) api.ZVal {
+func (s MapArray) Get(key any) api.IZVal {
 	var ok bool
 	var strKey string
 	if strKey, ok = key.(string); ok {
-	} else if zvalKey, ok := key.(api.ZVal); ok {
+	} else if zvalKey, ok := key.(api.IZVal); ok {
 		strKey = zvalKey.String()
 	} else {
 		strKey = zval.NewZVal(key).String()

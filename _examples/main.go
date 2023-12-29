@@ -9,7 +9,7 @@ func main() {
 	flag.Parse()
 	args := flag.Args()
 	if len(args) < 1 {
-		fmt.Println("type the command: dtos, tag, column,iterator to run")
+		fmt.Println("type the command: dtos, tag, column,iterator,json to run")
 		return
 	}
 	if args[0] == "dtos" {
@@ -20,6 +20,8 @@ func main() {
 		columnCommand()
 	} else if args[0] == "iterator" {
 		iteratorCommand()
+	} else if args[0] == "json" {
+		jsonCommand()
 	} else {
 		fmt.Println("no found command:", args[0])
 	}

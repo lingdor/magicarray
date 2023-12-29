@@ -4,12 +4,12 @@ import (
 	"time"
 )
 
-type ZVal interface {
+type IZVal interface {
 
 	// Compare less=1 equal = 2 large =3 faild = 4
 	Int() (int, bool)
 	Uint() (uint, bool)
-	Compare(val ZVal) bool
+	Compare(val IZVal) bool
 	Int64() (int64, bool)
 	Uint64() (uint64, bool)
 	Int32() (int32, bool)
@@ -19,9 +19,9 @@ type ZVal interface {
 	Uint16() (uint16, bool)
 	Uint8() (uint8, bool)
 	String() string
-	ZVal() ZVal
+	ZVal() IZVal
 	Interface() interface{}
-	Arr() (MagicArray, bool)
+	Arr() (IMagicArray, bool)
 	Kind() uint8
 	IsEmpty() bool
 	IsNil() bool
@@ -40,7 +40,7 @@ type ZVal interface {
 	MustUint32() uint32
 	MustUint16() uint16
 	MustUint8() uint8
-	MustArr() MagicArray
+	MustArr() IMagicArray
 	MustInt64() int64
 	MustUint64() uint64
 	MustFloat32() float32

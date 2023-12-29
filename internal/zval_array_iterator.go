@@ -16,29 +16,29 @@ func (z *ZValArrayIterator) Index() int {
 	return z.iteratePos
 }
 
-func (z *ZValArrayIterator) NextKV() (api.ZVal, api.ZVal) {
+func (z *ZValArrayIterator) NextKV() (api.IZVal, api.IZVal) {
 	z.iteratePos++
 	return z.currentKV()
 
 }
 
-func (z *ZValArrayIterator) FirstKV() (api.ZVal, api.ZVal) {
+func (z *ZValArrayIterator) FirstKV() (api.IZVal, api.IZVal) {
 	z.iteratePos = 0
 	return z.currentKV()
 }
 
-func (z *ZValArrayIterator) NextVal() api.ZVal {
+func (z *ZValArrayIterator) NextVal() api.IZVal {
 	z.iteratePos++
 	return z.currentVal()
 
 }
 
-func (z *ZValArrayIterator) FirstVal() api.ZVal {
+func (z *ZValArrayIterator) FirstVal() api.IZVal {
 	z.iteratePos = 0
 	return z.currentVal()
 }
 
-func (z *ZValArrayIterator) currentKV() (api.ZVal, api.ZVal) {
+func (z *ZValArrayIterator) currentKV() (api.IZVal, api.IZVal) {
 	if z.iteratePos < z.arr.Len() {
 		if !z.arr.isKeys {
 			return zval.NewZValOfKind(kind.Int, z.iteratePos), z.arr.listVals[z.iteratePos]
@@ -50,7 +50,7 @@ func (z *ZValArrayIterator) currentKV() (api.ZVal, api.ZVal) {
 	}
 }
 
-func (z *ZValArrayIterator) currentVal() api.ZVal {
+func (z *ZValArrayIterator) currentVal() api.IZVal {
 	if z.iteratePos < z.arr.Len() {
 		if !z.arr.isKeys {
 			return z.arr.listVals[z.iteratePos]

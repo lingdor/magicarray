@@ -17,12 +17,12 @@ func (t TArray[T]) IsKeys() bool {
 	return false
 }
 
-func (t TArray[T]) Keys() api.MagicArray {
+func (t TArray[T]) Keys() api.IMagicArray {
 	keys := GenListKeys(t.Len())
 	return TArray[int](keys)
 }
 
-func (t TArray[T]) Values() api.MagicArray {
+func (t TArray[T]) Values() api.IMagicArray {
 	return t
 }
 
@@ -30,7 +30,7 @@ func (t TArray[T]) Len() int {
 	return len(t)
 }
 
-func (t TArray[T]) Get(key interface{}) api.ZVal {
+func (t TArray[T]) Get(key interface{}) api.IZVal {
 	if index, ok := key.(int); ok {
 		if index < t.Len() {
 			//todo can improve performance to better in the go newer version
@@ -40,10 +40,10 @@ func (t TArray[T]) Get(key interface{}) api.ZVal {
 			return zval.NewZValNil()
 		}
 	}
-	var zv api.ZVal
+	var zv api.IZVal
 	var ok bool
 
-	if zv, ok = key.(api.ZVal); !ok {
+	if zv, ok = key.(api.IZVal); !ok {
 		zv = zval.NewZValOfKind(kind.Int, zv)
 	}
 	if ii, ok := zv.Int(); ok {

@@ -6,7 +6,7 @@ import (
 )
 
 func init() {
-	zval.ToMagicArr = func(list any) (api.MagicArray, error) {
+	zval.ToMagicArr = func(list any) (api.IMagicArray, error) {
 		return Valueof(list)
 	}
 }

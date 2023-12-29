@@ -16,7 +16,7 @@ func (s *StructArrayIterator) Index() int {
 	return s.index
 }
 
-func (i *StructArrayIterator) currentKV() (api.ZVal, api.ZVal) {
+func (i *StructArrayIterator) currentKV() (api.IZVal, api.IZVal) {
 	if i.index < i.arr.Len() {
 		key := i.keys[i.index]
 		if val := i.arr.Get(key); !val.IsNil() {
@@ -27,17 +27,17 @@ func (i *StructArrayIterator) currentKV() (api.ZVal, api.ZVal) {
 	}
 	return nil, nil
 }
-func (i *StructArrayIterator) NextKV() (api.ZVal, api.ZVal) {
+func (i *StructArrayIterator) NextKV() (api.IZVal, api.IZVal) {
 	i.index++
 	return i.currentKV()
 }
 
-func (i *StructArrayIterator) FirstKV() (api.ZVal, api.ZVal) {
+func (i *StructArrayIterator) FirstKV() (api.IZVal, api.IZVal) {
 	i.index = 0
 	return i.currentKV()
 }
 
-func (i *StructArrayIterator) currentVal() api.ZVal {
+func (i *StructArrayIterator) currentVal() api.IZVal {
 	if i.index < i.arr.Len() {
 		key := i.keys[i.index]
 		if val := i.arr.Get(key); !val.IsNil() {
@@ -49,12 +49,12 @@ func (i *StructArrayIterator) currentVal() api.ZVal {
 	return nil
 }
 
-func (i *StructArrayIterator) NextVal() api.ZVal {
+func (i *StructArrayIterator) NextVal() api.IZVal {
 	i.index++
 	return i.currentVal()
 }
 
-func (i *StructArrayIterator) FirstVal() api.ZVal {
+func (i *StructArrayIterator) FirstVal() api.IZVal {
 	i.index = 0
 	return i.currentVal()
 }

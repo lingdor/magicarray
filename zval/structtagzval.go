@@ -8,7 +8,7 @@ import (
 )
 
 type StructTagZVal struct {
-	base     api.ZVal
+	base     api.IZVal
 	fieldTag reflect.StructTag
 }
 
@@ -24,7 +24,7 @@ func (t *StructTagZVal) Uint() (uint, bool) {
 	return t.base.Uint()
 }
 
-func (t *StructTagZVal) Compare(val api.ZVal) bool {
+func (t *StructTagZVal) Compare(val api.IZVal) bool {
 	return t.base.Compare(val)
 }
 
@@ -64,7 +64,7 @@ func (t *StructTagZVal) String() string {
 	return t.base.String()
 }
 
-func (t *StructTagZVal) ZVal() api.ZVal {
+func (t *StructTagZVal) ZVal() api.IZVal {
 	return t.base.ZVal()
 }
 
@@ -72,7 +72,7 @@ func (t *StructTagZVal) Interface() interface{} {
 	return t.base.Interface()
 }
 
-func (t *StructTagZVal) Arr() (api.MagicArray, bool) {
+func (t *StructTagZVal) Arr() (api.IMagicArray, bool) {
 	return t.base.Arr()
 }
 
@@ -140,7 +140,7 @@ func (t *StructTagZVal) MustUint8() uint8 {
 	return t.base.MustUint8()
 }
 
-func (t *StructTagZVal) MustArr() api.MagicArray {
+func (t *StructTagZVal) MustArr() api.IMagicArray {
 	return t.base.MustArr()
 }
 
@@ -172,7 +172,7 @@ func (f *StructTagZVal) GetTag(tag string) (string, bool) {
 	return f.fieldTag.Lookup(tag)
 }
 
-func NewStructTagZVal(zval api.ZVal, field reflect.StructTag) api.ZVal {
+func NewStructTagZVal(zval api.IZVal, field reflect.StructTag) api.IZVal {
 	return &StructTagZVal{
 		base:     zval,
 		fieldTag: field,

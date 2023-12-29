@@ -28,12 +28,12 @@ func NewStructArray(val any, refVal reflect.Value) *StructArray {
 	}
 }
 
-func (s *StructArray) Keys() api.MagicArray {
+func (s *StructArray) Keys() api.IMagicArray {
 	keys := s.genKeys()
 	return TArray[string](keys)
 }
 
-func (s *StructArray) Values() api.MagicArray {
+func (s *StructArray) Values() api.IMagicArray {
 	var vals = make([]any, 0, s.Len())
 	iter := s.Iter()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
@@ -46,12 +46,12 @@ func (s *StructArray) Len() int {
 	return s.refVal.NumField()
 }
 
-func (s StructArray) Get(key any) api.ZVal {
+func (s StructArray) Get(key any) api.IZVal {
 	var ok bool
 	var strKey string
 	if strKey, ok = key.(string); !ok {
 		return zval.NewZValInvalid()
-	} else if zvalKey, ok := key.(api.ZVal); ok {
+	} else if zvalKey, ok := key.(api.IZVal); ok {
 		strKey = zvalKey.String()
 	} else {
 		strKey = zval.NewZVal(key).String()

@@ -1,6 +1,6 @@
 package api
 
-type MagicArray interface {
+type IMagicArray interface {
 	Iter() Iterator
 	KV
 	Len
@@ -9,11 +9,11 @@ type MagicArray interface {
 
 type Iterator interface {
 	// All The iterate of Array
-	NextKV() (ZVal, ZVal)
-	FirstKV() (ZVal, ZVal)
-	//NextKey() ZVal todo
-	NextVal() ZVal
-	FirstVal() ZVal
+	NextKV() (IZVal, IZVal)
+	FirstKV() (IZVal, IZVal)
+	//NextKey() IZVal todo
+	NextVal() IZVal
+	FirstVal() IZVal
 	Index() int
 }
 type Len interface {
@@ -21,12 +21,12 @@ type Len interface {
 }
 
 type KV interface {
-	Keys() MagicArray
-	Values() MagicArray
+	Keys() IMagicArray
+	Values() IMagicArray
 	IsKeys() bool
 }
 type Getter interface {
-	Get(key interface{}) ZVal
+	Get(key interface{}) IZVal
 }
 type Setter interface {
 	Set(key interface{}, val interface{}) WriteMagicArray
@@ -35,7 +35,7 @@ type Appender interface {
 	Append(val any) WriteMagicArray
 }
 type WriteMagicArray interface {
-	MagicArray
+	IMagicArray
 	Setter
 	Appender
 	Remover

@@ -218,7 +218,7 @@ func (Z *ZValObj) MustUint8() uint8 {
 	panic(errs.TypeAssertError)
 }
 
-func (Z *ZValObj) MustArr() api.MagicArray {
+func (Z *ZValObj) MustArr() api.IMagicArray {
 	if val, ok := Z.Arr(); ok {
 		return val
 	}
@@ -227,7 +227,7 @@ func (Z *ZValObj) MustArr() api.MagicArray {
 
 func (Z *ZValObj) IsEmpty() bool {
 	switch Z.kind {
-	case kind.Invalid, kind.Nil:
+	case kind.Invalid:
 		return true
 	case kind.Int:
 		return Z.MustInt() == 0
@@ -238,7 +238,7 @@ func (Z *ZValObj) IsEmpty() bool {
 	case kind.MagicArray:
 		return Z.MustArr().Len() == 0
 	case kind.String:
-		return len(Z.String()) == 0
+		return Z.String() == ""
 	case kind.Slice:
 		return reflect.ValueOf(Z.val).Len() == 0
 	case kind.Int8:
@@ -269,7 +269,7 @@ func (Z *ZValObj) IsEmpty() bool {
 }
 
 func (Z *ZValObj) IsNil() bool {
-	return Z.kind == kind.Nil || Z.kind == kind.Invalid
+	return Z.val == nil || Z.kind == kind.Invalid
 }
 
 func (Z *ZValObj) Int() (int, bool) {
@@ -296,7 +296,7 @@ func (Z *ZValObj) Kind() uint8 {
 	return Z.kind
 }
 
-func (Z *ZValObj) Compare(val api.ZVal) bool {
+func (Z *ZValObj) Compare(val api.IZVal) bool {
 	if Z.Kind() == val.Kind() {
 		return Z.val == val.Interface()
 	}
@@ -389,7 +389,7 @@ func (Z *ZValObj) String() string {
 	return fmt.Sprintf("%v", Z.val)
 }
 
-func (Z *ZValObj) ZVal() api.ZVal {
+func (Z *ZValObj) ZVal() api.IZVal {
 	return Z
 }
 
@@ -397,8 +397,8 @@ func (Z *ZValObj) Interface() any {
 	return Z.val
 }
 
-func (Z *ZValObj) Arr() (api.MagicArray, bool) {
-	if val, ok := Z.val.(api.MagicArray); ok {
+func (Z *ZValObj) Arr() (api.IMagicArray, bool) {
+	if val, ok := Z.val.(api.IMagicArray); ok {
 		return val, true
 	}
 	if arr, err := ToMagicArr(Z.val); err == nil {

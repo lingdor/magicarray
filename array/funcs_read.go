@@ -36,7 +36,7 @@ func Values(marr MagicArray) MagicArray {
 func Pick(marr MagicArray, keys ...any) MagicArray {
 	if marr.IsKeys() {
 		var retKeys = make([]string, 0, len(keys))
-		var retVals = make([]api.ZVal, 0, len(keys))
+		var retVals = make([]api.IZVal, 0, len(keys))
 		for _, key := range keys {
 			var strKey string
 			var ok bool

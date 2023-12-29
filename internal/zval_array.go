@@ -1,8 +1,6 @@
 package internal
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/errs"
@@ -15,11 +13,11 @@ type ZValArray struct {
 	isKeys   bool
 	isSorted bool
 	mapVals  map[string]ZValArrayMapVal
-	listVals []api.ZVal
+	listVals []api.IZVal
 }
 
 type ZValArrayMapVal struct {
-	val   api.ZVal
+	val   api.IZVal
 	index int
 }
 
@@ -28,7 +26,7 @@ func (m *ZValArray) Remove(key any) (api.WriteMagicArray, error) {
 		var strKey string
 		var ok bool
 		if strKey, ok = key.(string); ok {
-		} else if zval, ok := key.(api.ZVal); ok {
+		} else if zval, ok := key.(api.IZVal); ok {
 			strKey = zval.String()
 		}
 		if mapval, ok := m.mapVals[strKey]; ok {
@@ -79,7 +77,7 @@ func (m *ZValArray) Len() int {
 	return len(m.listVals)
 }
 
-func (m *ZValArray) Keys() api.MagicArray {
+func (m *ZValArray) Keys() api.IMagicArray {
 	if !m.isKeys {
 		keys := GenListKeys(m.Len())
 		return TArray[int](keys)
@@ -96,7 +94,7 @@ func (m *ZValArray) Keys() api.MagicArray {
 	return TArray[string](keys)
 }
 
-func (m *ZValArray) Values() api.MagicArray {
+func (m *ZValArray) Values() api.IMagicArray {
 
 	if !m.isKeys {
 		return &ZValArray{
@@ -104,7 +102,7 @@ func (m *ZValArray) Values() api.MagicArray {
 			listVals: m.listVals,
 		}
 	}
-	vals := make([]api.ZVal, m.Len())
+	vals := make([]api.IZVal, m.Len())
 	iter := m.Iter()
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
@@ -117,16 +115,16 @@ func (m *ZValArray) Values() api.MagicArray {
 	}
 }
 
-func (m *ZValArray) Get(key interface{}) api.ZVal {
+func (m *ZValArray) Get(key interface{}) api.IZVal {
 	if !m.isKeys {
 		if index, ok := key.(int); ok {
 			return m.listVals[index]
 		}
 		return zval.NewZValNil()
 	}
-	var zvalKey api.ZVal
+	var zvalKey api.IZVal
 	var ok bool
-	if zvalKey, ok = key.(api.ZVal); !ok {
+	if zvalKey, ok = key.(api.IZVal); !ok {
 		zvalKey = zval.NewZVal(key)
 	}
 	if v, ok := m.mapVals[zvalKey.String()]; ok {
@@ -149,12 +147,12 @@ func (m *ZValArray) toMap() {
 
 func (m *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 
-	var zvalKey, zvalVal api.ZVal
+	var zvalKey, zvalVal api.IZVal
 	var ok bool
-	if zvalKey, ok = key.(api.ZVal); !ok {
+	if zvalKey, ok = key.(api.IZVal); !ok {
 		zvalKey = zval.NewZVal(key)
 	}
-	if zvalVal, ok = val.(api.ZVal); !ok {
+	if zvalVal, ok = val.(api.IZVal); !ok {
 		zvalVal = zval.NewZVal(val)
 	}
 	if !m.isKeys {
@@ -175,7 +173,7 @@ func (m *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 	}
 	return m
 }
-func EmptyZValArray(isKeys, isSort bool, cap int) api.MagicArray {
+func EmptyZValArray(isKeys, isSort bool, cap int) api.IMagicArray {
 	return &ZValArray{
 		keys:     make([]string, 0, cap),
 		isKeys:   isKeys,
@@ -183,7 +181,7 @@ func EmptyZValArray(isKeys, isSort bool, cap int) api.MagicArray {
 		mapVals:  make(map[string]ZValArrayMapVal, cap),
 	}
 }
-func NewSortedArray(keys []string, vals []api.ZVal) api.MagicArray {
+func NewSortedArray(keys []string, vals []api.IZVal) api.IMagicArray {
 	mapVals := make(map[string]ZValArrayMapVal, len(keys))
 	for i := 0; i < len(vals); i++ {
 		mapVals[keys[i]] = ZValArrayMapVal{
@@ -199,46 +197,5 @@ func NewSortedArray(keys []string, vals []api.ZVal) api.MagicArray {
 	}
 }
 func (m *ZValArray) MarshalJSON() ([]byte, error) {
-	iter := m.Iter()
-	buffer := bytes.Buffer{}
-	if m.isKeys {
-		buffer.Write([]byte("{"))
-		var index = -1
-		for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
-			index++
-			if index != 0 {
-				buffer.Write([]byte(","))
-			}
-			tagName := k.String()
-			if tagval, ok := v.(api.ZValTag); ok {
-				if readTagName, ok := tagval.GetTag("json"); ok {
-					tagName = readTagName
-				}
-			}
-			buffer.Write([]byte(fmt.Sprintf("\"%s\":", tagName)))
-			if vBS, err := json.Marshal(v); err == nil {
-				buffer.Write(vBS)
-			} else {
-				return nil, err
-			}
-		}
-		buffer.Write([]byte("}"))
-		return buffer.Bytes(), nil
-	}
-
-	buffer.Write([]byte("["))
-	var index = -1
-	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
-		index++
-		if index != 0 {
-			buffer.Write([]byte(","))
-		}
-		if vBS, err := json.Marshal(v); err == nil {
-			buffer.Write(vBS)
-		} else {
-			return nil, err
-		}
-	}
-	buffer.Write([]byte("]"))
-	return buffer.Bytes(), nil
+	return JsonMarshal(m)
 }

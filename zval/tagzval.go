@@ -7,7 +7,7 @@ import (
 )
 
 type TagZVal struct {
-	base api.ZVal
+	base api.IZVal
 	tags map[string]string
 }
 
@@ -23,7 +23,7 @@ func (t *TagZVal) Uint() (uint, bool) {
 	return t.base.Uint()
 }
 
-func (t *TagZVal) Compare(val api.ZVal) bool {
+func (t *TagZVal) Compare(val api.IZVal) bool {
 	return t.base.Compare(val)
 }
 
@@ -63,7 +63,7 @@ func (t *TagZVal) String() string {
 	return t.base.String()
 }
 
-func (t *TagZVal) ZVal() api.ZVal {
+func (t *TagZVal) ZVal() api.IZVal {
 	return t.base.ZVal()
 }
 
@@ -71,7 +71,7 @@ func (t *TagZVal) Interface() interface{} {
 	return t.base.Interface()
 }
 
-func (t *TagZVal) Arr() (api.MagicArray, bool) {
+func (t *TagZVal) Arr() (api.IMagicArray, bool) {
 	return t.base.Arr()
 }
 
@@ -139,7 +139,7 @@ func (t *TagZVal) MustUint8() uint8 {
 	return t.base.MustUint8()
 }
 
-func (t *TagZVal) MustArr() api.MagicArray {
+func (t *TagZVal) MustArr() api.IMagicArray {
 	return t.base.MustArr()
 }
 
@@ -181,7 +181,7 @@ func (t *TagZVal) GetTag(tag string) (string, bool) {
 	}
 }
 
-func NewTagZVal(zval api.ZVal) api.ZVal {
+func NewTagZVal(zval api.IZVal) api.IZVal {
 	return &TagZVal{
 		base: zval,
 		tags: make(map[string]string, 0),

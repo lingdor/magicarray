@@ -32,5 +32,4 @@ const (
 	//Custom Kind
 	Time
 	MagicArray
-	Nil
 )

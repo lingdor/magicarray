@@ -4,17 +4,11 @@ import (
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/errs"
 	"github.com/lingdor/magicarray/internal"
-	"golang.org/x/exp/constraints"
 	"reflect"
 )
 
-type TArrayTypes interface {
-	constraints.Ordered | MagicArray | ZVal
-}
-
-func ValueOfSlice[T TArrayTypes](val []T) MagicArray {
+func ValueOfSlice[T any](val []T) MagicArray {
 	return internal.TArray[T](val)
-
 }
 
 func ValueofStruct(val any) MagicArray {
@@ -38,7 +32,7 @@ func valueofStrucstLoad(list any, refVal reflect.Value) MagicArray {
 	return ValueOfSlice(arrs)
 }
 
-// ValueOf no thread sfae
+// Valueof make a instance of MagicArray (no thread safe)
 func Valueof(list any) (ret MagicArray, err error) {
 	//todo nil -> empty?
 	if arr, ok := list.(MagicArray); ok {
@@ -72,7 +66,7 @@ func Valueof(list any) (ret MagicArray, err error) {
 		default:
 			if ss, ok := list.([]MagicArray); ok {
 				return ValueOfSlice(ss), nil
-			} else if ss, ok := list.([]api.MagicArray); ok {
+			} else if ss, ok := list.([]api.IMagicArray); ok {
 				return ValueOfSlice(ss), nil
 			}
 			objs := internal.SlicetoAnyList(refVal)
