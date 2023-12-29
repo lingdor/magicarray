@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 import (
 	"testing"

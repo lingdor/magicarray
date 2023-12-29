@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	arr "github.com/lingdor/magicarray"
+	"github.com/lingdor/magicarray/array"
 )
 
 type ColumnUserEntity struct {

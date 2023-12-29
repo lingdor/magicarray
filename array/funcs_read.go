@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 import (
 	"github.com/lingdor/magicarray/api"
@@ -13,28 +13,28 @@ func Column(from MagicArray, key interface{}) MagicArray {
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		i++
-		if arr, ok := v.Arr(); ok {
-			col = append(col, arr.Get(key))
+		if val, ok := v.Arr(); ok {
+			col = append(col, val.Get(key))
 		}
 	}
 	return ValueOfSlice(col)
 }
-func Len(arr MagicArray) int {
-	return arr.Len()
+func Len(marr MagicArray) int {
+	return marr.Len()
 }
-func Get(arr MagicArray, key interface{}) ZVal {
-	return arr.Get(key)
+func Get(marr MagicArray, key interface{}) ZVal {
+	return marr.Get(key)
 }
-func Keys(arr MagicArray) MagicArray {
-	return arr.Keys()
+func Keys(marr MagicArray) MagicArray {
+	return marr.Keys()
 }
-func Values(arr MagicArray) MagicArray {
-	return arr.Values()
+func Values(marr MagicArray) MagicArray {
+	return marr.Values()
 }
 
 // Pick Pick the keys and values to a new MagicArray for parameter keys order
-func Pick(arr MagicArray, keys ...any) MagicArray {
-	if arr.IsKeys() {
+func Pick(marr MagicArray, keys ...any) MagicArray {
+	if marr.IsKeys() {
 		var retKeys = make([]string, 0, len(keys))
 		var retVals = make([]api.ZVal, 0, len(keys))
 		for _, key := range keys {
@@ -44,11 +44,11 @@ func Pick(arr MagicArray, keys ...any) MagicArray {
 				strKey = zval.NewZVal(key).String()
 			}
 			retKeys = append(retKeys, strKey)
-			retVals = append(retVals, arr.Get(key))
+			retVals = append(retVals, marr.Get(key))
 		}
 		return internal.NewSortedArray(retKeys, retVals)
 	} else {
-		arr := internal.EmptyZValArray(false, false, len(keys))
+		marr := internal.EmptyZValArray(false, false, len(keys))
 		for _, key := range keys {
 			var intKey int
 			var ok bool
@@ -57,10 +57,10 @@ func Pick(arr MagicArray, keys ...any) MagicArray {
 					continue
 				}
 			}
-			if zvVal := arr.Get(intKey); zvVal.IsSet() {
-				arr = Append(arr, zvVal)
+			if zvVal := marr.Get(intKey); zvVal.IsSet() {
+				marr = Append(marr, zvVal)
 			}
 		}
-		return arr
+		return marr
 	}
 }

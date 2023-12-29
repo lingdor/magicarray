@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 // NamingDefault use the order of Json,hump
 const NamingDefault = NamingJsonFirst

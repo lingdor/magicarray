@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 // Merge fields from parameters to MagicArray
 func Merge(arr MagicArray, args ...any) (MagicArray, error) {

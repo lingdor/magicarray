@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 import (
 	"errors"
@@ -24,9 +24,9 @@ func Equals(from MagicArray, to any) error {
 	}
 	return nil
 }
-func Max(arr MagicArray) ZVal {
+func Max(marr MagicArray) ZVal {
 	maxVal := zval.NewZValNil()
-	iter := arr.Iter()
+	iter := marr.Iter()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && maxVal.Kind() == kind.Int && val.MustInt() > maxVal.MustInt() {
 			maxVal = val
@@ -43,10 +43,10 @@ func Max(arr MagicArray) ZVal {
 	}
 	return maxVal
 }
-func Min(arr MagicArray) ZVal {
+func Min(marr MagicArray) ZVal {
 
 	minVal := zval.NewZValNil()
-	iter := arr.Iter()
+	iter := marr.Iter()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && minVal.Kind() == kind.Int && val.MustInt() < minVal.MustInt() {
 			minVal = val
@@ -63,10 +63,10 @@ func Min(arr MagicArray) ZVal {
 	}
 	return minVal
 }
-func Sum(arr MagicArray) ZVal {
+func Sum(marr MagicArray) ZVal {
 
 	retVal := zval.NewZValOfKind(kind.Int, 0)
-	iter := arr.Iter()
+	iter := marr.Iter()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && retVal.Kind() == kind.Int {
 			retVal = zval.NewZValOfKind(kind.Int, retVal.MustInt()+val.MustInt())
@@ -83,9 +83,9 @@ func Sum(arr MagicArray) ZVal {
 }
 
 // In check value is in MagicArray
-func In(arr MagicArray, value any) bool {
+func In(marr MagicArray, value any) bool {
 
-	iter := arr.Iter()
+	iter := marr.Iter()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Compare(zval.NewZVal(value)) {
 			return true

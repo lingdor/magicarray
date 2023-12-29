@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	arr "github.com/lingdor/magicarray"
+	"github.com/lingdor/magicarray/array"
 )
 
 type IteratorInfo struct {

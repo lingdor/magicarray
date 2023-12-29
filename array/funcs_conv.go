@@ -1,19 +1,19 @@
-package magicarray
+package array
 
 import (
 	"github.com/lingdor/magicarray/internal"
 )
 
-func ToWriter(arr MagicArray) WriteMagicArray {
+func ToWriter(marr MagicArray) WriteMagicArray {
 	var setter WriteMagicArray
 	var ok bool
-	if setter, ok = arr.(WriteMagicArray); ok {
+	if setter, ok = marr.(WriteMagicArray); ok {
 		return setter
 	}
-	setter = Make(arr.IsKeys(), true, arr.Len()).(WriteMagicArray)
-	iter := arr.Iter()
+	setter = Make(marr.IsKeys(), true, marr.Len()).(WriteMagicArray)
+	iter := marr.Iter()
 	for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
-		if arr.IsKeys() {
+		if marr.IsKeys() {
 			setter = setter.Set(k, v)
 		} else {
 			setter = setter.Append(v)

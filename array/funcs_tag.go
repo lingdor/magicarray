@@ -1,4 +1,4 @@
-package magicarray
+package array
 
 // SetColumnTag Set tags of key column
 func SetColumnTag(array MagicArray, columnKey any, tagk, tagv string) MagicArray {
@@ -17,5 +17,5 @@ func SetColumnTag(array MagicArray, columnKey any, tagk, tagv string) MagicArray
 
 // SetTag Set tag key and value to the value of MagicArray
 func SetTag(arr MagicArray, key any, tagk, tagv string) MagicArray {
-	return Set(arr, tagk, ZValTagSet(arr.Get(key), tagk, tagv))
+	return Set(arr, key, ZValTagSet(arr.Get(key), tagk, tagv))
 }
