@@ -12,7 +12,7 @@ type IteratorInfo struct {
 }
 
 func iteratorCommand() {
-	ma := arr.ValueofStruct(IteratorInfo{
+	ma := array.ValueofStruct(IteratorInfo{
 		Field1: "field1",
 		Field2: 2,
 		Field3: true,

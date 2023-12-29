@@ -2,7 +2,7 @@ package zval
 
 import (
 	"encoding/json"
-	"github.com/lingdor/magicarray/array/api"
+	"github.com/lingdor/magicarray/api"
 	"time"
 )
 

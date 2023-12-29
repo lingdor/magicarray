@@ -8,7 +8,7 @@ func SetColumnTag(array MagicArray, columnKey any, tagk, tagv string) MagicArray
 		if rowArr, ok := row.Arr(); ok {
 			newArr := Set(rowArr, columnKey, ZValTagSet(rowArr.Get(columnKey), tagk, tagv))
 			if newArr != array {
-				array = Set(array, rowk, rowArr)
+				array = Set(array, rowk, newArr)
 			}
 		}
 	}

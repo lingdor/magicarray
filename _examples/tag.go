@@ -20,8 +20,8 @@ func tagCommand() {
 		IsMale:   true,
 	}
 
-	userArr := arr.ValueofStruct(users)
-	userArr = arr.SetTag(userArr, "Id", "json", "UserId")
+	userArr := array.ValueofStruct(users)
+	userArr = array.SetTag(userArr, "Id", "json", "UserId")
 	if bs, err := json.Marshal(userArr); err == nil {
 		fmt.Println(string(bs))
 	} else {

@@ -27,15 +27,15 @@ func columnCommand() {
 		},
 	}
 
-	usersArr := arr.ValueOfSlice(users)
-	usersArr = arr.WashColumn(usersArr, arr.WashTagRuleJsonInitialLower())
+	usersArr := array.ValueOfSlice(users)
+	usersArr = array.WashColumn(usersArr, array.WashTagRuleJsonInitialLower())
 	if bs, err := json.Marshal(usersArr); err == nil {
 		fmt.Println(string(bs))
 	} else {
 		panic(err)
 	}
 
-	usersArr = arr.Column(usersArr, "UserName")
+	usersArr = array.Column(usersArr, "UserName")
 	if bs, err := json.Marshal(usersArr); err == nil {
 		fmt.Println(string(bs))
 	} else {

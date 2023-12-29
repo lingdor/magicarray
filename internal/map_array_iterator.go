@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"github.com/lingdor/magicarray/array/api"
-	"github.com/lingdor/magicarray/array/kind"
-	"github.com/lingdor/magicarray/array/zval"
+	"github.com/lingdor/magicarray/api"
+	"github.com/lingdor/magicarray/kind"
+	"github.com/lingdor/magicarray/zval"
 )
 
 type MapArrayIterator struct {

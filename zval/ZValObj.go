@@ -3,9 +3,9 @@ package zval
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/lingdor/magicarray/array/api"
-	"github.com/lingdor/magicarray/array/errs"
-	"github.com/lingdor/magicarray/array/kind"
+	"github.com/lingdor/magicarray/api"
+	"github.com/lingdor/magicarray/errs"
+	"github.com/lingdor/magicarray/kind"
 	"reflect"
 	"strconv"
 	"time"

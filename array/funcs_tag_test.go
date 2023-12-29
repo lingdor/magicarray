@@ -27,10 +27,11 @@ func TestSetColumnTag(t *testing.T) {
 
 	rows, _ := Valueof(dbinfo)
 	rows = SetColumnTag(rows, "UserName", "json", "userName")
+	expect := `[{"Id":1,"userId":101,"userName":"bobby"},{"Id":2,"userId":102,"userName":"tom"}]`
 	if jsonbs, err := json.Marshal(rows); err == nil {
-		if string(jsonbs) != `[{"Id":1,"userId":101,"userName":"bobby"},{"Id":2,"userId":102,"userName":"tom"}]` {
+		if string(jsonbs) != expect {
 			fmt.Println(string(jsonbs))
-			t.Fail()
+			t.Errorf("no equals as expect json:%s", expect)
 		}
 	} else {
 		t.Error(err)

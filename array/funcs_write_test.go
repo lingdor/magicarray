@@ -25,6 +25,7 @@ func TestMerge(t *testing.T) {
 		"Field2": 16,
 		"Field1": "hello",
 		"hello":  123,
+		"Field3": nil,
 	}
 
 	//merge

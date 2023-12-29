@@ -1,7 +1,7 @@
 package internal
 
 import (
-	"github.com/lingdor/magicarray/array/api"
+	"github.com/lingdor/magicarray/api"
 	"reflect"
 )
 

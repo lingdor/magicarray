@@ -37,8 +37,8 @@ func dtosCommand() {
 		City:   "beij",
 	}
 
-	mix, _ := arr.Merge(arr.ValueofStruct(user), score, area)
-	mix = arr.Pick(mix, "Id", "City", "Score")
+	mix, _ := array.Merge(array.ValueofStruct(user), score, area)
+	mix = array.Pick(mix, "Id", "City", "Score")
 	if bs, err := json.Marshal(mix); err == nil {
 		fmt.Println(string(bs))
 	} else {
