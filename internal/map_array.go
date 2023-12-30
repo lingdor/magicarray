@@ -55,7 +55,11 @@ func (m *MapArray) Get(key any) api.IZVal {
 
 	keyVal := reflect.ValueOf(strKey)
 	retVal := m.refVal.MapIndex(keyVal)
-	return zval.NewZValOfReflect(retVal)
+	rawVal := retVal.Interface()
+	if rawVal == nil {
+		return zval.NewZValNil()
+	}
+	return zval.NewZVal(rawVal)
 }
 func (m *MapArray) genKeys() []any {
 

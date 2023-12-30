@@ -2,7 +2,6 @@ package internal
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/kind"
@@ -116,12 +115,22 @@ kloop:
 }
 
 func encodeZval(val api.IZVal, writer io.Writer, optInfo *api.JsonOptInfo) (err error) {
-	if arr, ok := val.Arr(); ok {
-		return jsonEncode(arr, writer, optInfo)
+	if val.IsNil() {
+		_, err = writer.Write([]byte("null"))
+		return
 	}
-	var bs []byte
-	if bs, err = json.Marshal(val.Interface()); err == nil {
-		_, err = writer.Write(bs)
+	switch val.Kind() {
+	case kind.Bool, kind.Int, kind.Int8, kind.Int16, kind.Int32, kind.Int64, kind.Uint, kind.Uint8, kind.Uint16, kind.Uint32, kind.Uint64, kind.Uintptr, kind.Float32, kind.Float64:
+		_, err = fmt.Fprint(writer, val.Interface())
+	case kind.MagicArray, kind.Map, kind.Slice, kind.Interface, kind.Struct:
+		if arr, ok := val.Arr(); ok {
+			return jsonEncode(arr, writer, optInfo)
+		}
+	default:
+		_, err = fmt.Fprintf(writer, "%q", val.String())
+	}
+	if err != nil {
+		return
 	}
 	return
 }
@@ -175,22 +184,27 @@ func (j *jsonTagIterator) next() (kv *jsonTagOpt) {
 			isSpace := unicode.IsSpace(rune(j.optRaw[j.index]))
 			if j.index == start && isSpace {
 				start = j.index + 1
-				last = start
+				last = start + 1
 				continue
 			} else if !isSpace {
-				last = j.index
+				last = j.index + 1
 			}
 		}
 	}
-	if step == 1 && start < len(j.optRaw) && last < len(j.optRaw) {
-		jsonOpt.val = j.optRaw[start : last+1]
+	if step == 1 && start < last && last <= len(j.optRaw) {
+		jsonOpt.val = j.optRaw[start:last]
+	} else if step == 0 && start < last && last <= len(j.optRaw) {
+		jsonOpt.name = j.optRaw[start:last]
+	}
+	if jsonOpt.name == "" {
+		return nil
 	}
 	return jsonOpt
 }
 
 func newJsonTagIterator(optRaw string) *jsonTagIterator {
 	iterator := &jsonTagIterator{
-		index:  -1,
+		index:  0,
 		optRaw: optRaw,
 	}
 	if next := iterator.next(); next != nil {

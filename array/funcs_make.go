@@ -34,7 +34,9 @@ func valueofStrucstLoad(list any, refVal reflect.Value) MagicArray {
 
 // Valueof make a instance of MagicArray (no thread safe)
 func Valueof(list any) (ret MagicArray, err error) {
-	//todo nil -> empty?
+	if list == nil {
+		return nil, errs.TypeAssertError
+	}
 	if arr, ok := list.(MagicArray); ok {
 		return arr, nil
 	}

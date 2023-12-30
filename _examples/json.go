@@ -3,14 +3,16 @@ package main
 import (
 	"fmt"
 	"github.com/lingdor/magicarray/array"
+	"time"
 )
 
 func jsonCommand() {
 	users, _ := array.Valueof([]map[string]any{
 		{
-			"id":        1,
-			"user_name": "bobby",
-			"Age":       nil,
+			"id":          1,
+			"user_name":   "bobby",
+			"Age":         nil,
+			"create_time": time.Now(),
 		},
 		{
 			"id":        2,

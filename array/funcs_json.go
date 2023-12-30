@@ -11,11 +11,11 @@ import (
 	"unicode"
 )
 
-func JsonEncode(arr api.IMagicArray, writer io.Writer, opts ...api.JsonOpt) (err error) {
+func JsonEncode(arr MagicArray, writer io.Writer, opts ...api.JsonOpt) error {
 	return internal.JsonEncode(arr, writer, opts...)
 }
 
-func JsonMarshal(arr api.IMagicArray, opts ...api.JsonOpt) ([]byte, error) {
+func JsonMarshal(arr MagicArray, opts ...api.JsonOpt) ([]byte, error) {
 	return internal.JsonMarshal(arr, opts...)
 }
 

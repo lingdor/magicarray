@@ -16,8 +16,8 @@ type ZValObj struct {
 	kind uint8
 }
 
-func (t *ZValObj) MarshalJSON() ([]byte, error) {
-	return json.Marshal(t.Interface())
+func (Z *ZValObj) MarshalJSON() ([]byte, error) {
+	return json.Marshal(Z.Interface())
 }
 
 func (Z *ZValObj) IsSet() bool {
@@ -383,10 +383,16 @@ func (Z *ZValObj) Uint8() (uint8, bool) {
 }
 
 func (Z *ZValObj) String() string {
-	if val, ok := Z.val.(string); ok {
-		return val
+
+	switch Z.Kind() {
+	case kind.String:
+		return Z.val.(string)
+	case kind.Bool, kind.Int, kind.Int8, kind.Int16, kind.Int32, kind.Int64, kind.Uint, kind.Uint8, kind.Uint16, kind.Uint32, kind.Uint64, kind.Uintptr, kind.Float32, kind.Float64:
+		return fmt.Sprint(Z.Interface())
+	default:
+		return fmt.Sprintf("%v", Z.Interface())
 	}
-	return fmt.Sprintf("%v", Z.val)
+
 }
 
 func (Z *ZValObj) ZVal() api.IZVal {
@@ -398,6 +404,7 @@ func (Z *ZValObj) Interface() any {
 }
 
 func (Z *ZValObj) Arr() (api.IMagicArray, bool) {
+
 	if val, ok := Z.val.(api.IMagicArray); ok {
 		return val, true
 	}

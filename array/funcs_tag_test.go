@@ -31,7 +31,7 @@ func TestSetColumnTag(t *testing.T) {
 	if jsonbs, err := json.Marshal(rows); err == nil {
 		if string(jsonbs) != expect {
 			fmt.Println(string(jsonbs))
-			t.Errorf("no equals as expect json:%s", expect)
+			t.Errorf("no equals as expect json:\n%s", expect)
 		}
 	} else {
 		t.Error(err)

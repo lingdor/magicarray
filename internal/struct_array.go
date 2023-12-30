@@ -54,7 +54,7 @@ func (s *StructArray) Get(key any) api.IZVal {
 
 	if typeField, ok := s.refVal.Type().FieldByName(strKey); ok {
 		refVal := s.refVal.FieldByName(typeField.Name)
-		return zval.NewStructTagZVal(zval.NewZValOfReflect(refVal), typeField.Tag)
+		return zval.NewStructTagZVal(zval.NewZValOfReflect(refVal.Interface(), &refVal), typeField.Tag)
 	}
 	return zval.NewZValInvalid()
 }
@@ -63,7 +63,10 @@ func (s *StructArray) genKeys() []string {
 	t := s.refVal.Type()
 	keys := make([]string, s.Len())
 	for i := 0; i < s.Len(); i++ {
-		keys[i] = t.Field(i).Name
+		field := t.Field(i)
+		if field.IsExported() {
+			keys[i] = field.Name
+		}
 	}
 	return keys
 }

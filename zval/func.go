@@ -10,6 +10,9 @@ import (
 var ToMagicArr func(list any) (api.IMagicArray, error)
 
 func NewZVal(val interface{}) api.IZVal {
+	return NewZValOfReflect(val, nil)
+}
+func NewZValOfReflect(val any, refVal *reflect.Value) api.IZVal {
 	switch zv := val.(type) {
 	case api.IMagicArray:
 		return NewZValOfKind(kind.MagicArray, val)
@@ -46,8 +49,11 @@ func NewZVal(val interface{}) api.IZVal {
 	case bool:
 		return NewZValOfKind(kind.Bool, val)
 	}
-	refVal := reflect.ValueOf(val)
-	return NewZValOfReflect(refVal)
+	if refVal == nil {
+		refValRaw := reflect.ValueOf(val)
+		refVal = &refValRaw
+	}
+	return NewZValOfKind(uint8(refVal.Kind()), val)
 }
 func NewZValOfKind(kind uint8, val any) api.IZVal {
 	return &ZValObj{
@@ -55,16 +61,19 @@ func NewZValOfKind(kind uint8, val any) api.IZVal {
 		val:  val,
 	}
 }
-func NewZValOfReflect(val reflect.Value) api.IZVal {
 
-	obj := val.Interface()
-	if _, ok := obj.(api.IMagicArray); ok {
-		return NewZValOfKind(kind.MagicArray, obj)
-	} else if v, ok := obj.(api.IZVal); ok {
-		return v
-	}
-	return NewZValOfKind(uint8(val.Kind()), obj)
-}
+//func NewZValOfReflect(val reflect.Value) api.IZVal {
+//	obj := val.Interface()
+//	switch ins := obj.(type) {
+//	case time.Time:
+//		return NewZValOfKind(kind.Time, ins)
+//	case api.IZVal:
+//		return ins
+//	case api.IMagicArray:
+//		return NewZValOfKind(kind.MagicArray, obj)
+//	}
+//	return NewZValOfKind(uint8(val.Kind()), obj)
+//}
 
 func NewZValInvalid() api.IZVal {
 
