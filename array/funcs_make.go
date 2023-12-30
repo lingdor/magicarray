@@ -21,7 +21,9 @@ func ValueofStructs(list any) (MagicArray, error) {
 		return nil, errs.TypeAssertError
 	}
 	return valueofStrucstLoad(list, refVal), nil
-
+}
+func ValueofMap(m map[string]any) MagicArray {
+	return internal.TMapArray(m)
 }
 func valueofStrucstLoad(list any, refVal reflect.Value) MagicArray {
 	len := refVal.Len()
@@ -75,7 +77,9 @@ func Valueof(list any) (ret MagicArray, err error) {
 			return ValueOfSlice(objs), nil
 		}
 	} else if kind == reflect.Map {
-
+		if tmap, ok := list.(map[string]any); ok {
+			return internal.TMapArray(tmap), nil
+		}
 		return internal.NewMapArray(list, refVal), nil
 	} else if kind == reflect.Struct {
 		return ValueofStruct(list), nil

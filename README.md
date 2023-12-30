@@ -51,12 +51,15 @@ arr2 := ValueofStructs([]UserInfo{
    {UserId:22,UserName:"name2",}
 })
 arr3:= ValueOfSlice([]string{"123","456,"789""})
-
+arr4 :=ValueofMap(map[string]any{
+    "column1":123,
+    "column2":true,
+})
 // Recommend use the above methods to make instance, that will be lesser to transform calculates.
 // at last ,you can use the common method:
-arr4 := Valuoef(map[string]any{
-"column1":123,
-"column2":true,
+arr4 := Valuoef(map[string]string{
+    "column1":"123",
+    "column2":"1",
 })
 
 ```

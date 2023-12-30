@@ -7,6 +7,7 @@ import (
 	"github.com/lingdor/magicarray/kind"
 	"github.com/lingdor/magicarray/zval"
 	"io"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -93,9 +94,15 @@ kloop:
 		}
 		var err error
 		if arr.IsKeys() {
-			if _, err = writer.Write([]byte(fmt.Sprintf("\"%s\":", ztag.String()))); err == nil {
-				err = encodeZval(v, writer, optInfo)
+
+			if _, err = writer.Write([]byte{byte('"')}); err == nil {
+				if _, err = writer.Write([]byte(ztag.String())); err == nil {
+					if _, err = writer.Write([]byte("\":")); err == nil {
+						err = encodeZval(v, writer, optInfo)
+					}
+				}
 			}
+
 		} else {
 			err = encodeZval(v, writer, optInfo)
 		}
@@ -120,15 +127,63 @@ func encodeZval(val api.IZVal, writer io.Writer, optInfo *api.JsonOptInfo) (err 
 		return
 	}
 	switch val.Kind() {
-	case kind.Bool, kind.Int, kind.Int8, kind.Int16, kind.Int32, kind.Int64, kind.Uint, kind.Uint8, kind.Uint16, kind.Uint32, kind.Uint64, kind.Uintptr, kind.Float32, kind.Float64:
-		_, err = fmt.Fprint(writer, val.Interface())
+	case kind.String:
+		v := val.String()
+		v = strings.ReplaceAll(v, "\"", "\\\"")
+		if _, err = writer.Write([]byte{byte('"')}); err == nil {
+			if _, err = writer.Write([]byte(v)); err == nil {
+				_, err = writer.Write([]byte{byte('"')})
+			}
+		}
+		return
+		//_, err = fmt.Fprint(writer, "%q", val.String())
+
+	case kind.Bool:
+		if v, ok := val.Bool(); ok {
+			_, err = writer.Write([]byte(strconv.FormatBool(v)))
+			return
+		}
+	case kind.Int:
+		if v, ok := val.Int(); ok {
+			_, err = writer.Write([]byte(strconv.Itoa(v)))
+			return
+		}
+	case kind.Uint:
+		if v, ok := val.Uint(); ok {
+			_, err = writer.Write([]byte(strconv.FormatUint(uint64(v), 10)))
+			return
+		}
+	case kind.Int64:
+		if v, ok := val.Int64(); ok {
+			_, err = writer.Write([]byte(strconv.FormatInt(v, 10)))
+			return
+		}
+	case kind.Uint64:
+		if v, ok := val.Uint64(); ok {
+			_, err = writer.Write([]byte(strconv.FormatUint(v, 10)))
+			return
+		}
+	case kind.Float32:
+		if v, ok := val.Float32(); ok {
+
+			//dst = strconv.AppendFloat(dst, src, fmt, -1, bits)
+			_, err = writer.Write([]byte(strconv.FormatFloat(float64(v), 'f', -1, 32)))
+			return
+		}
+	case kind.Float64:
+		if v, ok := val.Float64(); ok {
+
+			//dst = strconv.AppendFloat(dst, src, fmt, -1, bits)
+			_, err = writer.Write([]byte(strconv.FormatFloat(v, 'f', -1, 64)))
+			return
+		}
 	case kind.MagicArray, kind.Map, kind.Slice, kind.Interface, kind.Struct:
 		if arr, ok := val.Arr(); ok {
 			return jsonEncode(arr, writer, optInfo)
 		}
-	default:
-		_, err = fmt.Fprintf(writer, "%q", val.String())
 	}
+
+	_, err = fmt.Fprint(writer, val.Interface())
 	if err != nil {
 		return
 	}
