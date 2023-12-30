@@ -62,14 +62,14 @@ func (z *ZValArrayIterator) currentVal() api.IZVal {
 	}
 }
 
-func (m *ZValArray) Iter() api.Iterator {
+func (z *ZValArray) Iter() api.Iterator {
 
 	v := &ZValArrayIterator{
-		arr:        m,
+		arr:        z,
 		iteratePos: 0,
 	}
-	if m.isKeys {
-		v.keys = m.Keys().(TArray[string])
+	if z.isKeys {
+		v.keys = z.Keys().(TArray[string])
 	}
 	return v
 }

@@ -1,15 +1,8 @@
 package internal
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
 	"github.com/lingdor/magicarray/api"
-	"github.com/lingdor/magicarray/kind"
-	"github.com/lingdor/magicarray/zval"
-	"io"
 	"reflect"
-	"strings"
 )
 
 func GenListKeys(len int) []int {
@@ -30,111 +23,6 @@ func SlicetoAnyList(refVal reflect.Value) []any {
 }
 func newTArray[T any](listVal []T) api.IMagicArray {
 	return TArray[T](listVal)
-}
-
-func JsonMarshal(arr api.IMagicArray, opts ...api.JsonOpt) ([]byte, error) {
-
-	buff := &bytes.Buffer{}
-	err := JsonEncode(arr, buff, opts...)
-	return buff.Bytes(), err
-
-}
-func JsonEncode(arr api.IMagicArray, writer io.Writer, opts ...api.JsonOpt) (err error) {
-	optInfo := &api.JsonOptInfo{}
-	for _, opt := range opts {
-		opt(optInfo)
-	}
-	return jsonEncode(arr, writer, optInfo)
-}
-func jsonEncode(arr api.IMagicArray, writer io.Writer, optInfo *api.JsonOptInfo) (err error) {
-
-	iter := arr.Iter()
-	var first = true
-	if arr.IsKeys() {
-		writer.Write([]byte("{"))
-	kloop:
-		for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
-
-			tagName := k.String()
-			if tagval, ok := v.(api.ZValTag); ok {
-				if readTagName, ok := tagval.GetTag("json"); ok {
-					readTagNames := strings.Split(readTagName, ",")
-					for i := 1; i < len(readTagNames); i++ {
-						if v.IsNil() && strings.ToLower(strings.TrimSpace(readTagNames[i])) == "omitempty" {
-							continue kloop
-						}
-					}
-					tagName = readTagNames[0]
-				}
-			}
-			ztag := zval.NewZValOfKind(kind.String, tagName)
-			for _, opt := range optInfo.NameFilters {
-				var ok bool
-				if ztag, v, ok = opt(ztag, v); !ok {
-					continue kloop
-				}
-			}
-			for _, opt := range optInfo.ValueFilters {
-				var ok bool
-				if ztag, v, ok = opt(ztag, v); !ok {
-					continue kloop
-				}
-			}
-
-			if !first {
-				if _, err := writer.Write([]byte(",")); err != nil {
-					return err
-				}
-			} else {
-				first = false
-			}
-			var err error
-			if _, err = writer.Write([]byte(fmt.Sprintf("\"%s\":", ztag.String()))); err == nil {
-				err = encodeZval(v, writer, optInfo)
-			}
-			if err != nil {
-				return err
-			}
-		}
-		_, err := writer.Write([]byte("}"))
-		return err
-	}
-
-	if _, err = writer.Write([]byte("[")); err == nil {
-	sloop:
-		for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
-
-			for _, opt := range optInfo.ValueFilters {
-				var ok bool
-				if _, v, ok = opt(zval.NewZValOfKind(kind.Int, iter.Index()), v); !ok {
-					continue sloop
-				}
-			}
-
-			if !first {
-				if _, err := writer.Write([]byte(",")); err != nil {
-					return err
-				}
-			} else {
-				first = false
-			}
-			if err = encodeZval(v, writer, optInfo); err != nil {
-				return
-			}
-		}
-	}
-	_, err = writer.Write([]byte("]"))
-	return
-}
-func encodeZval(val api.IZVal, writer io.Writer, optInfo *api.JsonOptInfo) (err error) {
-	if arr, ok := val.Arr(); ok {
-		return jsonEncode(arr, writer, optInfo)
-	}
-	var bs []byte
-	if bs, err = json.Marshal(val.Interface()); err == nil {
-		_, err = writer.Write(bs)
-	}
-	return
 }
 
 //

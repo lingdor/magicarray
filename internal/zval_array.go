@@ -21,89 +21,89 @@ type ZValArrayMapVal struct {
 	index int
 }
 
-func (m *ZValArray) Remove(key any) (api.WriteMagicArray, error) {
-	if m.isKeys {
+func (z *ZValArray) Remove(key any) (api.WriteMagicArray, error) {
+	if z.isKeys {
 		var strKey string
 		var ok bool
 		if strKey, ok = key.(string); ok {
 		} else if zval, ok := key.(api.IZVal); ok {
 			strKey = zval.String()
 		}
-		if mapval, ok := m.mapVals[strKey]; ok {
-			if m.isSorted {
-				m.keys = append(m.keys[:mapval.index], m.keys[mapval.index+1:]...)
+		if mapval, ok := z.mapVals[strKey]; ok {
+			if z.isSorted {
+				z.keys = append(z.keys[:mapval.index], z.keys[mapval.index+1:]...)
 			}
-			delete(m.mapVals, strKey)
+			delete(z.mapVals, strKey)
 		} else {
-			return m, fmt.Errorf("%w map key:%s", errs.NoFundKey, strKey)
+			return z, fmt.Errorf("%w map key:%s", errs.NoFundKey, strKey)
 		}
-		return m, nil
+		return z, nil
 	}
 	if intKey, ok := key.(int); ok {
-		if m.Len() > intKey {
-			m.listVals = append(m.listVals[:intKey], m.listVals[intKey+1:]...)
-			return m, nil
+		if z.Len() > intKey {
+			z.listVals = append(z.listVals[:intKey], z.listVals[intKey+1:]...)
+			return z, nil
 		}
-		return m, errs.OutOfArrayLength
+		return z, errs.OutOfArrayLength
 	}
 
-	return m, errs.TypeAssertError
+	return z, errs.TypeAssertError
 }
 
-func (m *ZValArray) Append(val any) api.WriteMagicArray {
+func (z *ZValArray) Append(val any) api.WriteMagicArray {
 
-	if m.isKeys {
+	if z.isKeys {
 		var i = 0
 		for {
 			i++
-			if m.Get(i).IsNil() {
-				m.Set(i, val)
+			if z.Get(i).IsNil() {
+				z.Set(i, val)
 			}
 		}
 	} else {
-		m.listVals = append(m.listVals, zval.NewZVal(val))
+		z.listVals = append(z.listVals, zval.NewZVal(val))
 	}
-	return m
+	return z
 }
 
-func (m *ZValArray) IsKeys() bool {
-	return m.isKeys
+func (z *ZValArray) IsKeys() bool {
+	return z.isKeys
 }
 
-func (m *ZValArray) Len() int {
-	if m.isKeys {
-		return len(m.mapVals)
+func (z *ZValArray) Len() int {
+	if z.isKeys {
+		return len(z.mapVals)
 	}
-	return len(m.listVals)
+	return len(z.listVals)
 }
 
-func (m *ZValArray) Keys() api.IMagicArray {
-	if !m.isKeys {
-		keys := GenListKeys(m.Len())
+func (z *ZValArray) Keys() api.IMagicArray {
+	if !z.isKeys {
+		keys := GenListKeys(z.Len())
 		return TArray[int](keys)
 	}
-	if m.isSorted {
-		return TArray[string](m.keys)
+	if z.isSorted {
+		return TArray[string](z.keys)
 	}
-	keys := make([]string, m.Len())
+	keys := make([]string, z.Len())
 	i := -1
-	for k, _ := range m.mapVals {
+	for k, _ := range z.mapVals {
 		i++
 		keys[i] = k
 	}
 	return TArray[string](keys)
 }
 
-func (m *ZValArray) Values() api.IMagicArray {
+func (z *ZValArray) Values() api.IMagicArray {
 
-	if !m.isKeys {
+	if !z.isKeys {
 		return &ZValArray{
 			isKeys:   false,
-			listVals: m.listVals,
+			listVals: z.listVals,
 		}
 	}
-	vals := make([]api.IZVal, m.Len())
-	iter := m.Iter()
+	vals := make([]api.IZVal, z.Len())
+	iter := z.Iter()
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		i++
@@ -115,10 +115,10 @@ func (m *ZValArray) Values() api.IMagicArray {
 	}
 }
 
-func (m *ZValArray) Get(key interface{}) api.IZVal {
-	if !m.isKeys {
+func (z *ZValArray) Get(key interface{}) api.IZVal {
+	if !z.isKeys {
 		if index, ok := key.(int); ok {
-			return m.listVals[index]
+			return z.listVals[index]
 		}
 		return zval.NewZValNil()
 	}
@@ -127,25 +127,25 @@ func (m *ZValArray) Get(key interface{}) api.IZVal {
 	if zvalKey, ok = key.(api.IZVal); !ok {
 		zvalKey = zval.NewZVal(key)
 	}
-	if v, ok := m.mapVals[zvalKey.String()]; ok {
+	if v, ok := z.mapVals[zvalKey.String()]; ok {
 		return v.val
 	}
 	return zval.NewZValInvalid()
 }
 
-func (m *ZValArray) toMap() {
-	l := len(m.listVals)
-	//m.keys = make([]string, l)
-	m.mapVals = make(map[string]ZValArrayMapVal, l)
+func (z *ZValArray) toMap() {
+	l := len(z.listVals)
+	//z.keys = make([]string, l)
+	z.mapVals = make(map[string]ZValArrayMapVal, l)
 	for i := 0; i < l; i++ {
 		k := strconv.Itoa(i)
-		m.mapVals[k] = ZValArrayMapVal{val: m.listVals[i], index: i}
+		z.mapVals[k] = ZValArrayMapVal{val: z.listVals[i], index: i}
 	}
-	m.isKeys = true
-	m.listVals = nil
+	z.isKeys = true
+	z.listVals = nil
 }
 
-func (m *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
+func (z *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 
 	var zvalKey, zvalVal api.IZVal
 	var ok bool
@@ -155,23 +155,23 @@ func (m *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 	if zvalVal, ok = val.(api.IZVal); !ok {
 		zvalVal = zval.NewZVal(val)
 	}
-	if !m.isKeys {
-		if intKey, ok := zvalKey.Int(); ok && intKey < m.Len() {
-			m.listVals[intKey] = zvalVal
-			return m
+	if !z.isKeys {
+		if intKey, ok := zvalKey.Int(); ok && intKey < z.Len() {
+			z.listVals[intKey] = zvalVal
+			return z
 		}
-		m.toMap()
+		z.toMap()
 	}
 
-	if val, exists := m.mapVals[zvalKey.String()]; exists {
-		m.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: val.index}
+	if val, exists := z.mapVals[zvalKey.String()]; exists {
+		z.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: val.index}
 	} else {
-		m.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: m.Len()}
-		if m.isSorted {
-			m.keys = append(m.keys, zvalKey.String())
+		z.mapVals[zvalKey.String()] = ZValArrayMapVal{val: zvalVal, index: z.Len()}
+		if z.isSorted {
+			z.keys = append(z.keys, zvalKey.String())
 		}
 	}
-	return m
+	return z
 }
 func EmptyZValArray(isKeys, isSort bool, cap int) api.IMagicArray {
 	return &ZValArray{
@@ -196,6 +196,6 @@ func NewSortedArray(keys []string, vals []api.IZVal) api.IMagicArray {
 		mapVals:  mapVals,
 	}
 }
-func (m *ZValArray) MarshalJSON() ([]byte, error) {
-	return JsonMarshal(m)
+func (z *ZValArray) MarshalJSON() ([]byte, error) {
+	return JsonMarshal(z)
 }

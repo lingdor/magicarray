@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"encoding/json"
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/zval"
 	"reflect"
@@ -10,10 +9,6 @@ import (
 type StructArray struct {
 	obj    any
 	refVal reflect.Value
-}
-
-func (m *StructArray) MarshalJSON() ([]byte, error) {
-	return json.Marshal(m.obj)
 }
 
 func (s *StructArray) IsKeys() bool {
@@ -46,7 +41,7 @@ func (s *StructArray) Len() int {
 	return s.refVal.NumField()
 }
 
-func (s StructArray) Get(key any) api.IZVal {
+func (s *StructArray) Get(key any) api.IZVal {
 	var ok bool
 	var strKey string
 	if strKey, ok = key.(string); !ok {
@@ -80,4 +75,7 @@ func (s *StructArray) Iter() api.Iterator {
 		index: 0,
 		keys:  s.genKeys(),
 	}
+}
+func (s *StructArray) MarshalJSON() ([]byte, error) {
+	return JsonMarshal(s)
 }

@@ -62,3 +62,6 @@ func (t TArray[T]) Iter() api.Iterator {
 		index: 0,
 	}
 }
+func (t TArray[T]) MarshalJSON() ([]byte, error) {
+	return JsonMarshal(t)
+}
