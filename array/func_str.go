@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Implode the MagicArray to string
+// Implode to join the values to a string
 func Implode(arr MagicArray, separatorChar string) string {
 	iter := arr.Iter()
 	buffer := bytes.Buffer{}
