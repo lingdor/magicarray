@@ -12,6 +12,7 @@ go get github.com/lingdor/magicarray
 | array.ValueOfSlice                | Make a MagicArray instance from Slice or array, performance better than Makeof      |
 | array.ValueofStructs              | Make a MagicArray instance from Structs, performance better than Makeof             |
 | array.MustValueof                 | Make a MagicArray instance like Makeof,If return error than panic.                  |
+| array.ValueofMap                  | Make a MagicArray instance from map[string]any, performance better than Makeof      |
 | array.Make                        | Make a empty MagicArray instance                                                    |
 | array.Equals                      | Return If lenth equal and key and value equals                                      |
 | array.Max                         | Get the maximum  numberic value from the array                                      |
@@ -57,7 +58,7 @@ arr4 :=ValueofMap(map[string]any{
 })
 // Recommend use the above methods to make instance, that will be lesser to transform calculates.
 // at last ,you can use the common method:
-arr4 := Valuoef(map[string]string{
+arr5 := Valuoef(map[string]string{
     "column1":"123",
     "column2":"1",
 })
