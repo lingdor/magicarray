@@ -5,18 +5,18 @@ import (
 	"github.com/lingdor/magicarray/zval"
 )
 
-type TMapArray map[string]any
+type TMapArray[T any] map[string]T
 
-func (t TMapArray) IsKeys() bool {
+func (t TMapArray[T]) IsKeys() bool {
 	return true
 }
 
-func (t TMapArray) Keys() api.IMagicArray {
+func (t TMapArray[T]) Keys() api.IMagicArray {
 	keys := t.genKeys()
 	return TArray[string](keys)
 }
 
-func (t TMapArray) Values() api.IMagicArray {
+func (t TMapArray[T]) Values() api.IMagicArray {
 	var vals = make([]any, t.Len())
 	i := -1
 	for _, v := range t {
@@ -26,11 +26,11 @@ func (t TMapArray) Values() api.IMagicArray {
 	return TArray[any](vals)
 }
 
-func (t TMapArray) Len() int {
+func (t TMapArray[T]) Len() int {
 	return len(t)
 }
 
-func (t TMapArray) Get(key any) api.IZVal {
+func (t TMapArray[T]) Get(key any) api.IZVal {
 	var ok bool
 	var strKey string
 	if strKey, ok = key.(string); ok {
@@ -42,7 +42,7 @@ func (t TMapArray) Get(key any) api.IZVal {
 	rawVal := t[strKey]
 	return zval.NewZVal(rawVal)
 }
-func (t TMapArray) genKeys() []string {
+func (t TMapArray[T]) genKeys() []string {
 
 	keys := make([]string, t.Len())
 	i := -1
@@ -53,15 +53,15 @@ func (t TMapArray) genKeys() []string {
 	return keys
 }
 
-func (t TMapArray) Iter() api.Iterator {
+func (t TMapArray[T]) Iter() api.Iterator {
 
-	return &TMapArrayIterator{
+	return &TMapArrayIterator[T]{
 		arr:   t,
 		index: 0,
 		keys:  t.genKeys(),
 	}
 }
 
-func (t TMapArray) MarshalJSON() ([]byte, error) {
+func (t TMapArray[T]) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(t)
 }

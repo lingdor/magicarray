@@ -5,6 +5,8 @@ import (
 	"reflect"
 )
 
+var JsonMarshal func(arr api.IMagicArray, opts ...api.JsonOpt) ([]byte, error)
+
 func GenListKeys(len int) []int {
 	var keys = make([]int, len)
 	for i := 0; i < len; i++ {

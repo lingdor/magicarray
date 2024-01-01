@@ -32,4 +32,5 @@ const (
 	//Custom Kind
 	Time
 	MagicArray
+	Bytes
 )

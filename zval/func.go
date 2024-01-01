@@ -1,6 +1,7 @@
 package zval
 
 import (
+	"database/sql/driver"
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/kind"
 	"reflect"
@@ -13,11 +14,19 @@ func NewZVal(val interface{}) api.IZVal {
 	return NewZValOfReflect(val, nil)
 }
 func NewZValOfReflect(val any, refVal *reflect.Value) api.IZVal {
+NewZValOfReflect:
 	switch zv := val.(type) {
 	case api.IMagicArray:
 		return NewZValOfKind(kind.MagicArray, val)
 	case api.IZVal:
 		return zv
+	case driver.Valuer:
+		if cv, err := zv.Value(); err == nil {
+			if cv == nil {
+				return NewZValNil()
+			}
+			return NewZValOfReflect(cv, nil)
+		}
 	case string:
 		return NewZValOfKind(kind.String, val)
 	case int:
@@ -48,10 +57,18 @@ func NewZValOfReflect(val any, refVal *reflect.Value) api.IZVal {
 		return NewZValOfKind(kind.Time, val)
 	case bool:
 		return NewZValOfKind(kind.Bool, val)
+	case []byte:
+		return NewZValOfKind(kind.Bytes, zv)
 	}
 	if refVal == nil {
 		refValRaw := reflect.ValueOf(val)
 		refVal = &refValRaw
+	}
+	if uint8(refVal.Kind()) == kind.Pointer {
+		refValRow := refVal.Elem()
+		refVal = &refValRow
+		val = refVal.Interface()
+		goto NewZValOfReflect
 	}
 	return NewZValOfKind(uint8(refVal.Kind()), val)
 }

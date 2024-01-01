@@ -6,17 +6,17 @@ import (
 	"github.com/lingdor/magicarray/zval"
 )
 
-type TMapArrayIterator struct {
+type TMapArrayIterator[T any] struct {
 	index int
-	arr   TMapArray
+	arr   TMapArray[T]
 	keys  []string
 }
 
-func (t *TMapArrayIterator) Index() int {
+func (t *TMapArrayIterator[T]) Index() int {
 	return t.index
 }
 
-func (t *TMapArrayIterator) currentKV() (api.IZVal, api.IZVal) {
+func (t *TMapArrayIterator[T]) currentKV() (api.IZVal, api.IZVal) {
 	if t.index < t.arr.Len() {
 		key := t.keys[t.index]
 		if val := t.arr.Get(key); !val.IsNil() {
@@ -27,17 +27,17 @@ func (t *TMapArrayIterator) currentKV() (api.IZVal, api.IZVal) {
 	}
 	return nil, nil
 }
-func (t *TMapArrayIterator) NextKV() (api.IZVal, api.IZVal) {
+func (t *TMapArrayIterator[T]) NextKV() (api.IZVal, api.IZVal) {
 	t.index++
 	return t.currentKV()
 }
 
-func (t *TMapArrayIterator) FirstKV() (api.IZVal, api.IZVal) {
+func (t *TMapArrayIterator[T]) FirstKV() (api.IZVal, api.IZVal) {
 	t.index = 0
 	return t.currentKV()
 }
 
-func (t *TMapArrayIterator) currentVal() api.IZVal {
+func (t *TMapArrayIterator[T]) currentVal() api.IZVal {
 	if t.index < t.arr.Len() {
 		key := t.keys[t.index]
 		if val := t.arr.Get(key); !val.IsNil() {
@@ -49,12 +49,12 @@ func (t *TMapArrayIterator) currentVal() api.IZVal {
 	return nil
 }
 
-func (t *TMapArrayIterator) NextVal() api.IZVal {
+func (t *TMapArrayIterator[T]) NextVal() api.IZVal {
 	t.index++
 	return t.currentVal()
 }
 
-func (t *TMapArrayIterator) FirstVal() api.IZVal {
+func (t *TMapArrayIterator[T]) FirstVal() api.IZVal {
 	t.index = 0
 	return t.currentVal()
 }

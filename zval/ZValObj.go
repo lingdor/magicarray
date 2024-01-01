@@ -383,16 +383,42 @@ func (Z *ZValObj) Uint8() (uint8, bool) {
 }
 
 func (Z *ZValObj) String() string {
-
 	switch Z.Kind() {
+
+	case kind.Int, kind.Int8, kind.Int16, kind.Int32, kind.Int64:
+		if v, ok := Z.val.(int64); ok {
+			return strconv.FormatInt(v, 10)
+		}
+	case kind.Uint, kind.Uint8, kind.Uint16, kind.Uint32, kind.Uint64:
+		if v, ok := Z.val.(uint64); ok {
+			return strconv.FormatUint(v, 10)
+		}
 	case kind.String:
 		return Z.val.(string)
-	case kind.Bool, kind.Int, kind.Int8, kind.Int16, kind.Int32, kind.Int64, kind.Uint, kind.Uint8, kind.Uint16, kind.Uint32, kind.Uint64, kind.Uintptr, kind.Float32, kind.Float64:
-		return fmt.Sprint(Z.Interface())
-	default:
-		return fmt.Sprintf("%v", Z.Interface())
-	}
+	case kind.Bool:
+		if v, ok := Z.val.(bool); ok {
+			return strconv.FormatBool(v)
+		}
 
+	case kind.Float32:
+		if v, ok := Z.val.(float32); ok {
+			return strconv.FormatFloat(float64(v), 'f', -1, 32)
+		}
+	case kind.Float64:
+		if v, ok := Z.val.(float64); ok {
+			return strconv.FormatFloat(v, 'f', -1, 64)
+		}
+		return fmt.Sprint(Z.Interface())
+	case kind.Bytes:
+		if v, ok := Z.val.([]byte); ok {
+			return string(v)
+		}
+		return fmt.Sprint(Z.Interface())
+	}
+	if stringer, ok := Z.val.(fmt.Stringer); ok {
+		return stringer.String()
+	}
+	return fmt.Sprintf("%v", Z.Interface())
 }
 
 func (Z *ZValObj) ZVal() api.IZVal {
