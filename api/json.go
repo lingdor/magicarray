@@ -6,6 +6,8 @@ type JsonOptInfo struct {
 	NameFilters       []JsonOptFilter
 	ValueFilters      []JsonOptFilter
 	DefaultTimeFormat string
+	Deep              int
+	IndentSize        int
 }
 
 func (j *JsonOptInfo) TimeFormat() string {

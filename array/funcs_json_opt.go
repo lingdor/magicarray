@@ -46,3 +46,13 @@ func JsonOptDefaultNamingUnderscoreToHump() api.JsonOpt {
 			})
 	}
 }
+func JsonOptIndent(size int) api.JsonOpt {
+	return func(info *api.JsonOptInfo) {
+		info.IndentSize = size
+	}
+}
+func JsonOptIndent4() api.JsonOpt {
+	return func(info *api.JsonOptInfo) {
+		info.IndentSize = 4
+	}
+}

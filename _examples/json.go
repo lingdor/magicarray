@@ -23,7 +23,9 @@ func jsonCommand() {
 	bs, _ := array.JsonMarshal(
 		users,
 		array.JosnOptOmitEmpty(true),
-		array.JsonOptDefaultNamingUnderscoreToHump())
+		array.JsonOptDefaultNamingUnderscoreToHump(),
+		array.JsonOptIndent4(),
+	)
 
 	fmt.Println(string(bs))
 

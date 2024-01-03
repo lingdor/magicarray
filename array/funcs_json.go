@@ -30,9 +30,16 @@ func JsonEncode(arr api.IMagicArray, writer io.Writer, opts ...api.JsonOpt) (err
 	}
 	return
 }
+func genWrapSpace(size int) []byte {
+	bs := make([]byte, size+1)
+	bs[0] = '\n'
+	for i := 1; i < size; i++ {
+		bs[i] = ' '
+	}
+	return bs
+}
 func jsonEncode(arr api.IMagicArray, writer io.Writer, optInfo *api.JsonOptInfo) (err error) {
 
-	var first = true
 	token := '['
 	if arr.IsKeys() {
 		token = '{'
@@ -85,13 +92,11 @@ kloop:
 			}
 		}
 		//code
-		if !first {
-			if _, err := writer.Write([]byte(",")); err != nil {
-				return err
-			}
-		} else {
-			first = false
+
+		if optInfo.IndentSize > 0 {
+			writer.Write(genWrapSpace((optInfo.Deep + 1) * optInfo.IndentSize))
 		}
+
 		var err error
 		if arr.IsKeys() {
 
@@ -104,10 +109,25 @@ kloop:
 			}
 
 		} else {
-			err = encodeZval(v, writer, optInfo)
+			childOpt := *optInfo
+			childOpt.Deep++
+			err = encodeZval(v, writer, &childOpt)
+		}
+		if err == nil && iter.Index()+1 < arr.Len() {
+			if _, err = writer.Write([]byte(",")); err != nil {
+				return err
+			}
 		}
 		if err != nil {
 			return err
+		}
+	}
+
+	if optInfo.IndentSize > 0 {
+		if optInfo.Deep > 0 {
+			writer.Write(genWrapSpace((optInfo.Deep) * optInfo.IndentSize))
+		} else {
+			writer.Write([]byte{'\n'})
 		}
 	}
 
