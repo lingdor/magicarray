@@ -1,12 +1,7 @@
 package array
 
 import (
-	"bytes"
 	"github.com/lingdor/magicarray/api"
-	"github.com/lingdor/magicarray/kind"
-	"github.com/lingdor/magicarray/zval"
-	"strings"
-	"unicode"
 )
 
 func JosnOptOmitEmpty(isEmitEmtpty bool) api.JsonOpt {
@@ -19,8 +14,9 @@ func JosnOptOmitEmpty(isEmitEmtpty bool) api.JsonOpt {
 		})
 	}
 }
-func JsonOptDefaultNamingUnderscoreToHump() api.JsonOpt {
+func JsonOptDefaultNamingUnderscoreToCamelCase() api.JsonOpt {
 	return func(info *api.JsonOptInfo) {
+		washopt := GetWashFuncWashUnderScoreCaseToCamelCase(false)
 		info.NameFilters = append(info.NameFilters,
 			func(k api.IZVal, v api.IZVal) (api.IZVal, api.IZVal, bool) {
 				if tag, ok := v.(api.ZValTag); ok {
@@ -29,20 +25,7 @@ func JsonOptDefaultNamingUnderscoreToHump() api.JsonOpt {
 						return k, v, true
 					}
 				}
-
-				sp := strings.Split(strings.ToLower(k.String()), "_")
-				buf := bytes.Buffer{}
-				for i, item := range sp {
-					if len(item) < 1 {
-						continue
-					}
-					runes := []rune(item)
-					if i != 0 {
-						runes[0] = unicode.ToUpper(runes[0])
-					}
-					buf.Write([]byte(string(runes)))
-				}
-				return zval.NewZValOfKind(kind.String, buf.String()), v, true
+				return washopt(k, v)
 			})
 	}
 }

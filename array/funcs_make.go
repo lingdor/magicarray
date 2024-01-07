@@ -34,6 +34,11 @@ func valueofStrucstLoad(list any, refVal reflect.Value) MagicArray {
 	return ValueOfSlice(arrs)
 }
 
+// NewArr MagicArray of array values
+func NewArr[T any](vals ...T) MagicArray {
+	return ValueOfSlice(vals)
+}
+
 // Valueof make a instance of MagicArray (no thread safe)
 func Valueof(list any) (ret MagicArray, err error) {
 	if list == nil {
