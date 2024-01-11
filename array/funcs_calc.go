@@ -93,3 +93,10 @@ func In(marr MagicArray, value any) bool {
 	}
 	return false
 }
+
+func Empty(arr MagicArray) bool {
+	if arr == nil || arr.Len() == 0 {
+		return true
+	}
+	return false
+}

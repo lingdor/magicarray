@@ -16,7 +16,7 @@ func JosnOptOmitEmpty(isEmitEmtpty bool) api.JsonOpt {
 }
 func JsonOptDefaultNamingUnderscoreToCamelCase() api.JsonOpt {
 	return func(info *api.JsonOptInfo) {
-		washopt := GetWashFuncWashUnderScoreCaseToCamelCase(false)
+		washopt := GetWashKeysFuncWashUnderScoreCaseToCamelCase(false)
 		info.NameFilters = append(info.NameFilters,
 			func(k api.IZVal, v api.IZVal) (api.IZVal, api.IZVal, bool) {
 				if tag, ok := v.(api.ZValTag); ok {
