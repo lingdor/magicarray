@@ -75,7 +75,7 @@ func (s *StructArray) Iter() api.Iterator {
 
 	return &StructArrayIterator{
 		arr:   s,
-		index: 0,
+		index: -1,
 		keys:  s.genKeys(),
 	}
 }

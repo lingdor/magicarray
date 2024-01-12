@@ -75,7 +75,7 @@ func (m *MapArray) Iter() api.Iterator {
 
 	return &MapArrayIterator{
 		arr:   m,
-		index: 0,
+		index: -1,
 		keys:  m.genKeys(),
 	}
 }

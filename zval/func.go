@@ -14,6 +14,11 @@ func NewZVal(val interface{}) api.IZVal {
 	return NewZValOfReflect(val, nil)
 }
 func NewZValOfReflect(val any, refVal *reflect.Value) api.IZVal {
+
+	if refVal != nil && refVal.Kind() == reflect.Ptr && refVal.IsNil() {
+		return NewZValNil()
+	}
+
 NewZValOfReflect:
 	switch zv := val.(type) {
 	case api.IMagicArray:

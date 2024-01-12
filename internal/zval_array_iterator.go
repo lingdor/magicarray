@@ -66,7 +66,7 @@ func (z *ZValArray) Iter() api.Iterator {
 
 	v := &ZValArrayIterator{
 		arr:        z,
-		iteratePos: 0,
+		iteratePos: -1,
 	}
 	if z.isKeys {
 		v.keys = z.Keys().(TArray[string])

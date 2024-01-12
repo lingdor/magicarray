@@ -59,7 +59,7 @@ func (t TArray[T]) Get(key interface{}) api.IZVal {
 func (t TArray[T]) Iter() api.Iterator {
 	return &TArrayIterator[T]{
 		arr:   t,
-		index: 0,
+		index: -1,
 	}
 }
 func (t TArray[T]) MarshalJSON() ([]byte, error) {

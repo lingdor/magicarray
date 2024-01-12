@@ -57,7 +57,7 @@ func (t TMapArray[T]) Iter() api.Iterator {
 
 	return &TMapArrayIterator[T]{
 		arr:   t,
-		index: 0,
+		index: -1,
 		keys:  t.genKeys(),
 	}
 }
