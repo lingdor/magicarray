@@ -32,6 +32,21 @@ func Values(marr MagicArray) MagicArray {
 	return marr.Values()
 }
 
+func MaxLen(marr MagicArray) int {
+	max := 0
+	iter := marr.Iter()
+	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
+		if val.IsNil() {
+			continue
+		}
+		l := len(val.String())
+		if l > max {
+			max = l
+		}
+	}
+	return max
+}
+
 // Pick Pick the keys and values to a new MagicArray for parameter keys order
 func Pick(marr MagicArray, keys ...any) MagicArray {
 	if marr.IsKeys() {
