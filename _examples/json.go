@@ -23,7 +23,7 @@ func jsonCommand() {
 	bs, _ := array.JsonMarshal(
 		users,
 		array.JosnOptOmitEmpty(true),
-		array.JsonOptDefaultNamingUnderscoreToHump(),
+		array.JsonOptDefaultNamingUnderscoreToCamelCase(),
 		array.JsonOptIndent4(),
 	)
 

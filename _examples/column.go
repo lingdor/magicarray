@@ -28,7 +28,7 @@ func columnCommand() {
 	}
 
 	usersArr := array.ValueOfSlice(users)
-	usersArr = array.WashColumn(usersArr, array.WashTagRuleJsonInitialLower())
+	usersArr = array.WashAll(usersArr, array.WashTagRuleJsonInitialLower())
 	if bs, err := json.Marshal(usersArr); err == nil {
 		fmt.Println(string(bs))
 	} else {

@@ -17,7 +17,7 @@ func ValueofStruct(val any) MagicArray {
 }
 func ValueofStructs(list any) (MagicArray, error) {
 	refVal := reflect.ValueOf(list)
-	if refVal.Kind() != reflect.Slice || refVal.Elem().Kind() != reflect.Struct {
+	if refVal.Kind() != reflect.Slice {
 		return nil, errs.TypeAssertError
 	}
 	return valueofStrucstLoad(list, refVal), nil
