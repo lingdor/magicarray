@@ -31,6 +31,7 @@ type IZVal interface {
 	Float64() (float64, bool)
 	Time() (time.Time, bool)
 	Bool() (bool, bool)
+	Bytes() []byte
 
 	MustInt() int
 	MustUint() uint

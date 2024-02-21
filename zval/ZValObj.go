@@ -72,7 +72,6 @@ func (Z *ZValObj) Float32() (float32, bool) {
 	} else {
 		return 0.0, false
 	}
-
 }
 
 func (Z *ZValObj) Float64() (float64, bool) {
@@ -419,6 +418,10 @@ func (Z *ZValObj) String() string {
 		return stringer.String()
 	}
 	return fmt.Sprintf("%v", Z.Interface())
+}
+
+func (Z *ZValObj) Bytes() []byte {
+	return []byte(Z.String())
 }
 
 func (Z *ZValObj) ZVal() api.IZVal {

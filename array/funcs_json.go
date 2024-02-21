@@ -23,6 +23,13 @@ func JsonMarshal(arr api.IMagicArray, opts ...api.JsonOpt) ([]byte, error) {
 	return buff.Bytes(), err
 
 }
+func MustJsonMarshal(arr api.IMagicArray, opts ...api.JsonOpt) []byte {
+	bs, err := JsonMarshal(arr, opts...)
+	if err != nil {
+		panic(err)
+	}
+	return bs
+}
 func JsonEncode(arr api.IMagicArray, writer io.Writer, opts ...api.JsonOpt) (err error) {
 	var bs []byte
 	if bs, err = JsonMarshal(arr, opts...); err == nil {

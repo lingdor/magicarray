@@ -62,6 +62,9 @@ func (t *TagZVal) Uint8() (uint8, bool) {
 func (t *TagZVal) String() string {
 	return t.base.String()
 }
+func (t *TagZVal) Bytes() []byte {
+	return t.base.Bytes()
+}
 
 func (t *TagZVal) ZVal() api.IZVal {
 	return t.base.ZVal()

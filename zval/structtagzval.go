@@ -172,6 +172,10 @@ func (f *StructTagZVal) GetTag(tag string) (string, bool) {
 	return f.fieldTag.Lookup(tag)
 }
 
+func (f *StructTagZVal) Bytes() []byte {
+	return f.base.Bytes()
+}
+
 func NewStructTagZVal(zval api.IZVal, field reflect.StructTag) api.IZVal {
 	return &StructTagZVal{
 		base:     zval,
