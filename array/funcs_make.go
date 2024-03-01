@@ -8,14 +8,23 @@ import (
 )
 
 func ValueOfSlice[T any](val []T) MagicArray {
+	if val == nil {
+		return Make(false, false, 0)
+	}
 	return internal.TArray[T](val)
 }
 
 func ValueofStruct(val any) MagicArray {
+	if val == nil {
+		return Make(false, false, 0)
+	}
 	refVal := reflect.ValueOf(val)
 	return internal.NewStructArray(val, refVal)
 }
 func ValueofStructs(list any) (MagicArray, error) {
+	if list == nil {
+		return Make(false, false, 0), nil
+	}
 	refVal := reflect.ValueOf(list)
 	if refVal.Kind() != reflect.Slice {
 		return nil, errs.TypeAssertError
@@ -23,6 +32,9 @@ func ValueofStructs(list any) (MagicArray, error) {
 	return valueofStrucstLoad(list, refVal), nil
 }
 func ValueofMap[T any](m map[string]T) MagicArray {
+	if m == nil {
+		return Make(false, false, 0)
+	}
 	return internal.TMapArray[T](m)
 }
 func valueofStrucstLoad(list any, refVal reflect.Value) MagicArray {
@@ -42,7 +54,8 @@ func NewArr[T any](vals ...T) MagicArray {
 // Valueof make a instance of MagicArray (no thread safe)
 func Valueof(list any) (ret MagicArray, err error) {
 	if list == nil {
-		return nil, errs.TypeAssertError
+		return Make(false, false, 0), nil
+		//return nil, errs.TypeAssertError
 	}
 	if arr, ok := list.(MagicArray); ok {
 		return arr, nil
