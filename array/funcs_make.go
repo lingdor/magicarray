@@ -117,3 +117,13 @@ func MustValueof(list any) MagicArray {
 func Make(isKeys, isSort bool, cap int) MagicArray {
 	return internal.EmptyZValArray(isKeys, isSort, cap)
 }
+
+func Clone(arr MagicArray) MagicArray {
+
+	var mp = make(map[string]any, arr.Len())
+	iter := arr.Iter()
+	for k, v := iter.FirstKV(); v != nil; k, v = iter.NextKV() {
+		mp[k.String()] = v.Interface()
+	}
+	return ValueofMap(mp)
+}
