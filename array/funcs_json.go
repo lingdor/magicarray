@@ -2,6 +2,7 @@ package array
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/kind"
@@ -287,4 +288,12 @@ func newJsonTagIterator(optRaw string) *jsonTagIterator {
 		iterator.name = next.name
 	}
 	return iterator
+}
+
+func JsonUnMarshal(content []byte) (MagicArray, error) {
+	var val any
+	if err := json.Unmarshal(content, &val); err != nil {
+		return nil, err
+	}
+	return Valueof(val)
 }

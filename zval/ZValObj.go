@@ -280,6 +280,8 @@ func (Z *ZValObj) Int() (int, bool) {
 	} else if Z.kind == kind.Float64 || Z.kind == kind.Float32 {
 		//todo
 		str = fmt.Sprintf("%.0f", Z.val)
+	} else if Z.kind == kind.Bytes {
+		str = string(Z.val.([]byte))
 	} else {
 		str = fmt.Sprintf("%d", Z.val)
 	}

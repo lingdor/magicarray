@@ -54,7 +54,7 @@ func NewArr[T any](vals ...T) MagicArray {
 // Valueof make a instance of MagicArray (no thread safe)
 func Valueof(list any) (ret MagicArray, err error) {
 	if list == nil {
-		return Make(false, false, 0), nil
+		return nil, nil
 		//return nil, errs.TypeAssertError
 	}
 	if arr, ok := list.(MagicArray); ok {

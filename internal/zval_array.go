@@ -58,6 +58,7 @@ func (z *ZValArray) Append(val any) api.WriteMagicArray {
 			i++
 			if z.Get(i).IsNil() {
 				z.Set(i, val)
+				return z
 			}
 		}
 	} else {
