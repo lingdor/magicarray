@@ -56,7 +56,7 @@ func (z *ZValArrayIterator) currentVal() api.IZVal {
 			return z.arr.listVals[z.iteratePos]
 		}
 		strKey := z.keys[z.iteratePos]
-		return z.arr.mapVals[strKey].val
+		return z.arr.mapVals[strKey]
 	} else {
 		return nil
 	}
