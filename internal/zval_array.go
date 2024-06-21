@@ -195,15 +195,23 @@ func EmptyZValArray(isKeys, isSort bool, cap int) api.IMagicArray {
 	}
 }
 func NewSortedArray(keys []string, vals []api.IZVal) api.IMagicArray {
+	if len(keys) != len(vals) {
+		return nil
+	}
+
 	mapVals := make(map[string]api.IZVal, len(keys))
+	keyIndexMap := make(map[string]int, len(keys))
 	for i := 0; i < len(vals); i++ {
 		mapVals[keys[i]] = vals[i]
+		keyIndexMap[keys[i]] = i
 	}
+
 	return &ZValArray{
-		keys:     keys,
-		isSorted: true,
-		isKeys:   true,
-		mapVals:  mapVals,
+		keys:      keys,
+		isSorted:  true,
+		isKeys:    true,
+		mapVals:   mapVals,
+		KeysIndex: keyIndexMap,
 	}
 }
 func (z *ZValArray) MarshalJSON() ([]byte, error) {
