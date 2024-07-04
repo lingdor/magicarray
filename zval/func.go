@@ -15,7 +15,12 @@ func NewZVal(val interface{}) api.IZVal {
 }
 func NewZValOfReflect(val any, refVal *reflect.Value) api.IZVal {
 
-	if refVal != nil && refVal.Kind() == reflect.Ptr && refVal.IsNil() {
+	if refVal == nil {
+		rval := reflect.ValueOf(val)
+		refVal = &rval
+	}
+
+	if refVal.Kind() == reflect.Ptr && refVal.IsNil() {
 		return NewZValNil()
 	}
 
@@ -65,10 +70,7 @@ NewZValOfReflect:
 	case []byte:
 		return NewZValOfKind(kind.Bytes, zv)
 	}
-	if refVal == nil {
-		refValRaw := reflect.ValueOf(val)
-		refVal = &refValRaw
-	}
+
 	if uint8(refVal.Kind()) == kind.Pointer {
 		refValRow := refVal.Elem()
 		refVal = &refValRow
