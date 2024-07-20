@@ -79,6 +79,16 @@ func (s *StructArray) Iter() api.Iterator {
 		keys:  s.genKeys(),
 	}
 }
+
+func (s *StructArray) RIter() api.Iterator {
+
+	return &StructArrayIterator{
+		arr:     s,
+		index:   -1,
+		keys:    s.genKeys(),
+		reverse: true,
+	}
+}
 func (s *StructArray) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(s)
 }

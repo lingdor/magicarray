@@ -68,7 +68,7 @@ func (Z *ZValObj) Float32() (float32, bool) {
 	}
 	str := Z.String()
 	if fval, err := strconv.ParseFloat(str, 32); err == nil {
-		return float32(fval), false
+		return float32(fval), true
 	} else {
 		return 0.0, false
 	}
@@ -81,7 +81,7 @@ func (Z *ZValObj) Float64() (float64, bool) {
 	}
 	str := Z.String()
 	if fval, err := strconv.ParseFloat(str, 64); err == nil {
-		return fval, false
+		return fval, true
 	} else {
 		return 0.0, false
 	}
@@ -109,7 +109,7 @@ func (Z *ZValObj) Uint() (uint, bool) {
 	str := Z.String()
 
 	if val, err := strconv.ParseUint(str, 10, strconv.IntSize); err == nil {
-		return uint(val), false
+		return uint(val), true
 	} else {
 		return 0.0, false
 	}
@@ -123,7 +123,7 @@ func (Z *ZValObj) Int64() (int64, bool) {
 	str := Z.String()
 
 	if val, err := strconv.ParseInt(str, 10, 64); err == nil {
-		return val, false
+		return val, true
 	} else {
 		return 0.0, false
 	}
@@ -137,7 +137,7 @@ func (Z *ZValObj) Uint64() (uint64, bool) {
 	}
 	str := Z.String()
 	if val, err := strconv.ParseUint(str, 10, 64); err == nil {
-		return val, false
+		return val, true
 	} else {
 		return 0.0, false
 	}
@@ -415,6 +415,9 @@ func (Z *ZValObj) String() string {
 			return string(v)
 		}
 		return fmt.Sprint(Z.Interface())
+	}
+	if Z.IsNil() {
+		return ""
 	}
 	if stringer, ok := Z.val.(fmt.Stringer); ok {
 		return stringer.String()

@@ -2,6 +2,7 @@ package api
 
 type IMagicArray interface {
 	Iter() Iterator
+	RIter() Iterator
 	KV
 	Len
 	Getter

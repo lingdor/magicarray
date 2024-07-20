@@ -7,9 +7,10 @@ import (
 )
 
 type TMapArrayIterator[T any] struct {
-	index int
-	arr   TMapArray[T]
-	keys  []string
+	index   int
+	arr     TMapArray[T]
+	keys    []string
+	reverse bool
 }
 
 func (t *TMapArrayIterator[T]) Index() int {
@@ -28,17 +29,25 @@ func (t *TMapArrayIterator[T]) currentKV() (api.IZVal, api.IZVal) {
 	return nil, nil
 }
 func (t *TMapArrayIterator[T]) NextKV() (api.IZVal, api.IZVal) {
-	t.index++
+	if t.reverse == false {
+		t.index++
+	} else {
+		t.index--
+	}
 	return t.currentKV()
 }
 
 func (t *TMapArrayIterator[T]) FirstKV() (api.IZVal, api.IZVal) {
-	t.index = 0
+	if t.reverse == false {
+		t.index = 0
+	} else {
+		t.index = t.arr.Len() - 1
+	}
 	return t.currentKV()
 }
 
 func (t *TMapArrayIterator[T]) currentVal() api.IZVal {
-	if t.index < t.arr.Len() {
+	if t.index < t.arr.Len() && t.index > -1 {
 		key := t.keys[t.index]
 		if val := t.arr.Get(key); !val.IsNil() {
 			return val
@@ -50,11 +59,19 @@ func (t *TMapArrayIterator[T]) currentVal() api.IZVal {
 }
 
 func (t *TMapArrayIterator[T]) NextVal() api.IZVal {
-	t.index++
+	if t.reverse == false {
+		t.index++
+	} else {
+		t.index--
+	}
 	return t.currentVal()
 }
 
 func (t *TMapArrayIterator[T]) FirstVal() api.IZVal {
-	t.index = 0
+	if t.reverse == false {
+		t.index = 0
+	} else {
+		t.index = t.arr.Len() - 1
+	}
 	return t.currentVal()
 }

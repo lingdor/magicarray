@@ -7,9 +7,10 @@ import (
 )
 
 type MapArrayIterator struct {
-	index int
-	arr   *MapArray
-	keys  []any
+	index   int
+	arr     *MapArray
+	keys    []any
+	reverse bool
 }
 
 func (m *MapArrayIterator) Index() int {
@@ -28,17 +29,25 @@ func (i *MapArrayIterator) currentKV() (api.IZVal, api.IZVal) {
 	return nil, nil
 }
 func (i *MapArrayIterator) NextKV() (api.IZVal, api.IZVal) {
-	i.index++
+	if i.reverse == false {
+		i.index++
+	} else {
+		i.index--
+	}
 	return i.currentKV()
 }
 
 func (i *MapArrayIterator) FirstKV() (api.IZVal, api.IZVal) {
-	i.index = 0
+	if i.reverse == false {
+		i.index = 0
+	} else {
+		i.index = i.arr.Len() - 1
+	}
 	return i.currentKV()
 }
 
 func (i *MapArrayIterator) currentVal() api.IZVal {
-	if i.index < i.arr.Len() {
+	if i.index < i.arr.Len() && i.index > -1 {
 		key := i.keys[i.index]
 		if val := i.arr.Get(key); !val.IsNil() {
 			return val
@@ -50,11 +59,19 @@ func (i *MapArrayIterator) currentVal() api.IZVal {
 }
 
 func (i *MapArrayIterator) NextVal() api.IZVal {
-	i.index++
+	if i.reverse == false {
+		i.index++
+	} else {
+		i.index--
+	}
 	return i.currentVal()
 }
 
 func (i *MapArrayIterator) FirstVal() api.IZVal {
-	i.index = 0
+	if i.reverse == false {
+		i.index = 0
+	} else {
+		i.index = i.arr.Len() - 1
+	}
 	return i.currentVal()
 }

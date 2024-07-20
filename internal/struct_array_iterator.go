@@ -7,9 +7,10 @@ import (
 )
 
 type StructArrayIterator struct {
-	index int
-	arr   *StructArray
-	keys  []string
+	index   int
+	arr     *StructArray
+	keys    []string
+	reverse bool
 }
 
 func (s *StructArrayIterator) Index() int {
@@ -28,17 +29,25 @@ func (i *StructArrayIterator) currentKV() (api.IZVal, api.IZVal) {
 	return nil, nil
 }
 func (i *StructArrayIterator) NextKV() (api.IZVal, api.IZVal) {
-	i.index++
+	if i.reverse == false {
+		i.index++
+	} else {
+		i.index--
+	}
 	return i.currentKV()
 }
 
 func (i *StructArrayIterator) FirstKV() (api.IZVal, api.IZVal) {
-	i.index = 0
+	if i.reverse == false {
+		i.index = 0
+	} else {
+		i.index = i.arr.Len() - 1
+	}
 	return i.currentKV()
 }
 
 func (i *StructArrayIterator) currentVal() api.IZVal {
-	if i.index < i.arr.Len() {
+	if i.index < i.arr.Len() && i.index > -1 {
 		key := i.keys[i.index]
 		if val := i.arr.Get(key); !val.IsNil() {
 			return val
@@ -50,11 +59,19 @@ func (i *StructArrayIterator) currentVal() api.IZVal {
 }
 
 func (i *StructArrayIterator) NextVal() api.IZVal {
-	i.index++
+	if i.reverse == false {
+		i.index++
+	} else {
+		i.index--
+	}
 	return i.currentVal()
 }
 
 func (i *StructArrayIterator) FirstVal() api.IZVal {
-	i.index = 0
+	if i.reverse == false {
+		i.index = 0
+	} else {
+		i.index = i.arr.Len() - 1
+	}
 	return i.currentVal()
 }

@@ -7,8 +7,9 @@ import (
 )
 
 type TArrayIterator[T any] struct {
-	index int
-	arr   TArray[T]
+	index   int
+	arr     TArray[T]
+	reverse bool
 }
 
 func (t *TArrayIterator[T]) Index() int {
@@ -22,28 +23,44 @@ func (t *TArrayIterator[T]) currentKV() (api.IZVal, api.IZVal) {
 	return nil, nil
 }
 func (t *TArrayIterator[T]) NextKV() (api.IZVal, api.IZVal) {
-	t.index++
+	if t.reverse == false {
+		t.index++
+	} else {
+		t.index--
+	}
 	return t.currentKV()
 }
 
 func (t *TArrayIterator[T]) FirstKV() (api.IZVal, api.IZVal) {
-	t.index = 0
+	if t.reverse == false {
+		t.index = 0
+	} else {
+		t.index = t.arr.Len() - 1
+	}
 	return t.currentKV()
 }
 
 func (t *TArrayIterator[T]) currentVal() api.IZVal {
-	if t.index < t.arr.Len() {
+	if t.index < t.arr.Len() && t.index > -1 {
 		return zval.NewZVal(t.arr[t.index])
 	}
 	return nil
 }
 
 func (t *TArrayIterator[T]) NextVal() api.IZVal {
-	t.index++
+	if t.reverse == false {
+		t.index++
+	} else {
+		t.index--
+	}
 	return t.currentVal()
 }
 
 func (t *TArrayIterator[T]) FirstVal() api.IZVal {
-	t.index = 0
+	if t.reverse == false {
+		t.index = 0
+	} else {
+		t.index = t.arr.Len() - 1
+	}
 	return t.currentVal()
 }

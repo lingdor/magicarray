@@ -80,6 +80,16 @@ func (m *MapArray) Iter() api.Iterator {
 	}
 }
 
+func (m *MapArray) RIter() api.Iterator {
+
+	return &MapArrayIterator{
+		arr:     m,
+		index:   -1,
+		keys:    m.genKeys(),
+		reverse: true,
+	}
+}
+
 func (m *MapArray) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(m)
 }

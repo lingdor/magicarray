@@ -61,6 +61,15 @@ func (t TMapArray[T]) Iter() api.Iterator {
 		keys:  t.genKeys(),
 	}
 }
+func (t TMapArray[T]) RIter() api.Iterator {
+
+	return &TMapArrayIterator[T]{
+		arr:     t,
+		index:   -1,
+		keys:    t.genKeys(),
+		reverse: true,
+	}
+}
 
 func (t TMapArray[T]) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(t)
