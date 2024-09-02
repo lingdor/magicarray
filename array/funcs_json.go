@@ -159,6 +159,7 @@ func encodeZval(val api.IZVal, writer io.Writer, optInfo *api.JsonOptInfo) (err 
 		v := val.String()
 		v = strings.ReplaceAll(v, "\"", "\\\"")
 		v = strings.ReplaceAll(v, "\n", "\\n")
+		v = strings.ReplaceAll(v, "\\", "\\\\")
 		if _, err = writer.Write([]byte{byte('"')}); err == nil {
 			if _, err = writer.Write([]byte(v)); err == nil {
 				_, err = writer.Write([]byte{byte('"')})
