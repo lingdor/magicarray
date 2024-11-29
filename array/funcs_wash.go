@@ -1,16 +1,17 @@
 package array
 
 import (
+	"unicode"
+
 	"github.com/lingdor/magicarray/kind"
 	"github.com/lingdor/magicarray/zval"
-	"unicode"
 )
 
 // WashColumn Wash the value of MagicArray column by rules
 func WashColumn(array MagicArray, column string, rules ...WashRuleFunc) MagicArray {
 
 	newArr := Make(false, false, array.Len())
-	iter := array.Iter()
+	iter := array.Iter_()
 rowLoop:
 	for row := iter.FirstVal(); row != nil; row = iter.NextVal() {
 		if rowArr, ok := row.Arr(); ok {
@@ -45,7 +46,7 @@ type WashRuleFunc func(key, val ZVal) (ZVal, ZVal, bool)
 func WashAll(arr MagicArray, rules ...WashRuleFunc) MagicArray {
 
 	newArr := Make(true, true, arr.Len())
-	iter := arr.Iter()
+	iter := arr.Iter_()
 rowLoop:
 	for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
 		for _, rule := range rules {

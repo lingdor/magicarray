@@ -9,7 +9,7 @@ import (
 func Column(from MagicArray, key interface{}) MagicArray {
 
 	var col = make([]ZVal, 0, from.Len())
-	iter := from.Iter()
+	iter := from.Iter_()
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		i++
@@ -34,7 +34,7 @@ func Values(marr MagicArray) MagicArray {
 
 func MaxLen(marr MagicArray) int {
 	max := 0
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.IsNil() {
 			continue

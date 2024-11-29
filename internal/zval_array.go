@@ -2,10 +2,12 @@ package internal
 
 import (
 	"fmt"
+	"strconv"
+
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/errs"
+	"github.com/lingdor/magicarray/kind"
 	"github.com/lingdor/magicarray/zval"
-	"strconv"
 )
 
 type ZValArray struct {
@@ -114,7 +116,7 @@ func (z *ZValArray) Values() api.IMagicArray {
 		}
 	}
 	vals := make([]api.IZVal, z.Len())
-	iter := z.Iter()
+	iter := z.Iter_()
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		i++
@@ -185,6 +187,39 @@ func (z *ZValArray) Set(key interface{}, val interface{}) api.WriteMagicArray {
 	}
 	return z
 }
+func (z *ZValArray) Iter() api.IterFunc {
+	return func(yield func(api.IZVal, api.IZVal) bool) {
+		if z.isKeys {
+			for _, key := range z.keys {
+				zkey := zval.NewZValOfKind(kind.String, key)
+				if !yield(zkey, z.Get(key)) {
+					return
+				}
+			}
+		} else {
+			for i, val := range z.listVals {
+				if !yield(zval.NewZValOfKind(kind.Int, i), val) {
+					return
+				}
+			}
+		}
+	}
+}
+func (z *ZValArray) IterRows() api.IterRowsFunc {
+	return func(yield func(api.IZVal, api.IMagicArray) bool) {
+		for k, v := range z.Iter() {
+			if !yield(k, v.MustArr()) {
+				return
+			}
+		}
+	}
+}
+func (z *ZValArray) Reverse() api.IMagicArray {
+	return &ReverseMap{
+		arr: z,
+	}
+}
+
 func EmptyZValArray(isKeys, isSort bool, cap int) api.IMagicArray {
 	return &ZValArray{
 		keys:      make([]string, 0, cap),

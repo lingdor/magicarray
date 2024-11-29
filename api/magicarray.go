@@ -1,11 +1,17 @@
 package api
 
+type IterFunc func(func(IZVal, IZVal) bool)
+type IterRowsFunc func(func(IZVal, IMagicArray) bool)
+
 type IMagicArray interface {
-	Iter() Iterator
-	RIter() Iterator
+	Iter_() Iterator
+	RIter_() Iterator
+	IterRows() IterRowsFunc
+	Iter() IterFunc
 	KV
 	Len
 	Getter
+	Reverse() IMagicArray
 }
 
 type Iterator interface {
@@ -22,7 +28,7 @@ type Len interface {
 }
 
 type KV interface {
-	Keys() IMagicArray
+Keys() IMagicArray
 	Values() IMagicArray
 	IsKeys() bool
 }

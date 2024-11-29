@@ -71,7 +71,7 @@ arr5 := Valuoef(map[string]string{
         Field2: 2,
         Field3: true,
     })
-    iter := arr.Iter()
+    iter := arr.Iter_()
     for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
         fmt.Printf("%s=%s\n", k.String(), v.String())
     }

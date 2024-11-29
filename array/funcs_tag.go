@@ -3,7 +3,7 @@ package array
 // SetColumnTag Set tags of key column
 func SetColumnTag(array MagicArray, columnKey any, tagk, tagv string) MagicArray {
 
-	iter := array.Iter()
+	iter := array.Iter_()
 	for rowk, row := iter.FirstKV(); row != nil; rowk, row = iter.NextKV() {
 		if rowArr, ok := row.Arr(); ok {
 			newArr := Set(rowArr, columnKey, ZValTagSet(rowArr.Get(columnKey), tagk, tagv))

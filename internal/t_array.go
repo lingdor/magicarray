@@ -2,6 +2,7 @@ package internal
 
 import (
 	"encoding/json"
+
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/kind"
 	"github.com/lingdor/magicarray/zval"
@@ -56,14 +57,14 @@ func (t TArray[T]) Get(key interface{}) api.IZVal {
 	return zval.NewZValInvalid()
 }
 
-func (t TArray[T]) Iter() api.Iterator {
+func (t TArray[T]) Iter_() api.Iterator {
 	return &TArrayIterator[T]{
 		arr:   t,
 		index: -1,
 	}
 }
 
-func (t TArray[T]) RIter() api.Iterator {
+func (t TArray[T]) RIter_() api.Iterator {
 	return &TArrayIterator[T]{
 		arr:     t,
 		index:   -1,
@@ -72,4 +73,29 @@ func (t TArray[T]) RIter() api.Iterator {
 }
 func (t TArray[T]) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(t)
+}
+
+func (t TArray[T]) Iter() api.IterFunc {
+	return func(yield func(api.IZVal, api.IZVal) bool) {
+		iter := t.Iter_()
+		for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
+			if !yield(k, v) {
+				return
+			}
+		}
+	}
+}
+func (t TArray[T]) IterRows() api.IterRowsFunc {
+	return func(yield func(api.IZVal, api.IMagicArray) bool) {
+		for k, v := range t.Iter() {
+			if !yield(k, v.MustArr()) {
+				return
+			}
+		}
+	}
+}
+func (t TArray[T]) Reverse() api.IMagicArray {
+	return &ReverseMap{
+		arr: t,
+	}
 }

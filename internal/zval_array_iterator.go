@@ -79,7 +79,7 @@ func (z *ZValArrayIterator) currentVal() api.IZVal {
 	}
 }
 
-func (z *ZValArray) Iter() api.Iterator {
+func (z *ZValArray) Iter_() api.Iterator {
 
 	v := &ZValArrayIterator{
 		arr:        z,
@@ -91,7 +91,7 @@ func (z *ZValArray) Iter() api.Iterator {
 	return v
 }
 
-func (z *ZValArray) RIter() api.Iterator {
+func (z *ZValArray) RIter_() api.Iterator {
 
 	v := &ZValArrayIterator{
 		arr:        z,

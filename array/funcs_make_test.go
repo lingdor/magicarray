@@ -125,7 +125,7 @@ func TestClone(t *testing.T) {
 	if newArr.Len() != 3 {
 		t.Error("cloned array length not expect")
 	}
-	iter := arr.Iter()
+	iter := arr.Iter_()
 	for k, v := iter.FirstKV(); v != nil; k, v = iter.NextKV() {
 		if !newArr.Get(k).Compare(v) {
 			t.Errorf(" clone key:%s not equalls", k.String())

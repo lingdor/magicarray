@@ -11,7 +11,7 @@ func ToWriter(marr MagicArray) WriteMagicArray {
 		return setter
 	}
 	setter = Make(marr.IsKeys(), true, marr.Len()).(WriteMagicArray)
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
 		if marr.IsKeys() {
 			setter = setter.Set(k, v)
@@ -27,7 +27,7 @@ func ToStringList(array MagicArray) []string {
 		return []string(strs)
 	}
 	strs := make([]string, 0, array.Len())
-	iter := array.Iter()
+	iter := array.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		strs = append(strs, val.String())
 	}
@@ -39,7 +39,7 @@ func ToIntList(array MagicArray) []int {
 		return []int(arr)
 	}
 	ints := make([]int, 0, array.Len())
-	iter := array.Iter()
+	iter := array.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if intval, ok := val.Int(); ok {
 			ints = append(ints, intval)
@@ -50,7 +50,7 @@ func ToIntList(array MagicArray) []int {
 
 func ToAnyList(array MagicArray) []any {
 	var ret = make([]any, array.Len())
-	iter := array.Iter()
+	iter := array.Iter_()
 	var i = -1
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		i++
@@ -61,7 +61,7 @@ func ToAnyList(array MagicArray) []any {
 
 func ToMap(array MagicArray) map[string]any {
 	mm := make(map[string]any, array.Len())
-	iter := array.Iter()
+	iter := array.Iter_()
 	for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
 		mm[k.String()] = v.Interface()
 	}

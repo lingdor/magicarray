@@ -53,7 +53,7 @@ func (t TMapArray[T]) genKeys() []string {
 	return keys
 }
 
-func (t TMapArray[T]) Iter() api.Iterator {
+func (t TMapArray[T]) Iter_() api.Iterator {
 
 	return &TMapArrayIterator[T]{
 		arr:   t,
@@ -61,7 +61,7 @@ func (t TMapArray[T]) Iter() api.Iterator {
 		keys:  t.genKeys(),
 	}
 }
-func (t TMapArray[T]) RIter() api.Iterator {
+func (t TMapArray[T]) RIter_() api.Iterator {
 
 	return &TMapArrayIterator[T]{
 		arr:     t,
@@ -73,4 +73,29 @@ func (t TMapArray[T]) RIter() api.Iterator {
 
 func (t TMapArray[T]) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(t)
+}
+
+func (t TMapArray[T]) Iter() api.IterFunc {
+	return func(yield func(api.IZVal, api.IZVal) bool) {
+		iter := t.Iter_()
+		for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
+			if !yield(k, v) {
+				return
+			}
+		}
+	}
+}
+func (t TMapArray[T]) IterRows() api.IterRowsFunc {
+	return func(yield func(api.IZVal, api.IMagicArray) bool) {
+		for k, v := range t.Iter() {
+			if !yield(k, v.MustArr()) {
+				return
+			}
+		}
+	}
+}
+func (t TMapArray[T]) Reverse() api.IMagicArray {
+	return &ReverseMap{
+		arr: t,
+	}
 }

@@ -1,9 +1,10 @@
 package internal
 
 import (
+	"reflect"
+
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/zval"
-	"reflect"
 )
 
 type StructArray struct {
@@ -30,7 +31,7 @@ func (s *StructArray) Keys() api.IMagicArray {
 
 func (s *StructArray) Values() api.IMagicArray {
 	var vals = make([]any, 0, s.Len())
-	iter := s.Iter()
+	iter := s.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		vals = append(vals, val)
 	}
@@ -71,7 +72,7 @@ func (s *StructArray) genKeys() []string {
 	return keys
 }
 
-func (s *StructArray) Iter() api.Iterator {
+func (s *StructArray) Iter_() api.Iterator {
 
 	return &StructArrayIterator{
 		arr:   s,
@@ -80,7 +81,7 @@ func (s *StructArray) Iter() api.Iterator {
 	}
 }
 
-func (s *StructArray) RIter() api.Iterator {
+func (s *StructArray) RIter_() api.Iterator {
 
 	return &StructArrayIterator{
 		arr:     s,
@@ -91,4 +92,30 @@ func (s *StructArray) RIter() api.Iterator {
 }
 func (s *StructArray) MarshalJSON() ([]byte, error) {
 	return JsonMarshal(s)
+}
+
+func (s *StructArray) Iter() api.IterFunc {
+	return func(yield func(api.IZVal, api.IZVal) bool) {
+		iter := s.Iter_()
+		for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
+			if !yield(k, v) {
+				return
+			}
+		}
+	}
+}
+
+func (s *StructArray) IterRows() api.IterRowsFunc {
+	return func(yield func(api.IZVal, api.IMagicArray) bool) {
+		for k, v := range s.Iter() {
+			if !yield(k, v.MustArr()) {
+				return
+			}
+		}
+	}
+}
+func (s *StructArray) Reverse() api.IMagicArray {
+	return &ReverseMap{
+		arr: s,
+	}
 }

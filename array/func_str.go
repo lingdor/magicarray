@@ -7,7 +7,7 @@ import (
 
 // Implode to join the values to a string
 func Implode(arr MagicArray, separatorChar string) string {
-	iter := arr.Iter()
+	iter := arr.Iter_()
 	buffer := bytes.Buffer{}
 	for v := iter.FirstVal(); v != nil; v = iter.NextVal() {
 		if iter.Index() > 0 {

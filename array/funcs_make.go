@@ -1,10 +1,11 @@
 package array
 
 import (
+	"reflect"
+
 	"github.com/lingdor/magicarray/api"
 	"github.com/lingdor/magicarray/errs"
 	"github.com/lingdor/magicarray/internal"
-	"reflect"
 )
 
 func ValueOfSlice[T any](val []T) MagicArray {
@@ -121,7 +122,7 @@ func Make(isKeys, isSort bool, cap int) MagicArray {
 func Clone(arr MagicArray) MagicArray {
 
 	var mp = make(map[string]any, arr.Len())
-	iter := arr.Iter()
+	iter := arr.Iter_()
 	for k, v := iter.FirstKV(); v != nil; k, v = iter.NextKV() {
 		mp[k.String()] = v.Interface()
 	}

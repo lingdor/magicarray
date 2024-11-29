@@ -9,7 +9,7 @@ func Merge(arr MagicArray, args ...any) (MagicArray, error) {
 		if err != nil {
 			return nil, err
 		}
-		iter := toArr.Iter()
+		iter := toArr.Iter_()
 		if toArr.IsKeys() {
 			for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
 				setter = Set(setter, k, v)

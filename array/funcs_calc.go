@@ -3,6 +3,7 @@ package array
 import (
 	"errors"
 	"fmt"
+
 	"github.com/lingdor/magicarray/kind"
 	"github.com/lingdor/magicarray/zval"
 )
@@ -15,7 +16,7 @@ func Equals(from MagicArray, to any) error {
 	if from.Len() != toArr.Len() {
 		return errors.New(fmt.Sprintf("magicarray length is not equals, from=%d,to=%d", from.Len(), toArr.Len()))
 	}
-	fromIter := from.Iter()
+	fromIter := from.Iter_()
 	for k, v := fromIter.FirstKV(); k != nil && v != nil; k, v = fromIter.NextKV() {
 		toV := toArr.Get(k)
 		if !v.Compare(toV) {
@@ -26,7 +27,7 @@ func Equals(from MagicArray, to any) error {
 }
 func Max(marr MagicArray) ZVal {
 	maxVal := zval.NewZValNil()
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && maxVal.Kind() == kind.Int && val.MustInt() > maxVal.MustInt() {
 			maxVal = val
@@ -46,7 +47,7 @@ func Max(marr MagicArray) ZVal {
 func Min(marr MagicArray) ZVal {
 
 	minVal := zval.NewZValNil()
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && minVal.Kind() == kind.Int && val.MustInt() < minVal.MustInt() {
 			minVal = val
@@ -66,7 +67,7 @@ func Min(marr MagicArray) ZVal {
 func Sum(marr MagicArray) ZVal {
 
 	retVal := zval.NewZValOfKind(kind.Int, 0)
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Kind() == kind.Int && retVal.Kind() == kind.Int {
 			retVal = zval.NewZValOfKind(kind.Int, retVal.MustInt()+val.MustInt())
@@ -85,7 +86,7 @@ func Sum(marr MagicArray) ZVal {
 // In check value is in MagicArray
 func In(marr MagicArray, value any) bool {
 
-	iter := marr.Iter()
+	iter := marr.Iter_()
 	for val := iter.FirstVal(); val != nil; val = iter.NextVal() {
 		if val.Compare(zval.NewZVal(value)) {
 			return true

@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/lingdor/magicarray/api"
-	"github.com/lingdor/magicarray/kind"
-	"github.com/lingdor/magicarray/zval"
 	"io"
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/lingdor/magicarray/api"
+	"github.com/lingdor/magicarray/kind"
+	"github.com/lingdor/magicarray/zval"
 )
 
 func JsonMarshal(arr api.IMagicArray, opts ...api.JsonOpt) ([]byte, error) {
@@ -56,7 +57,7 @@ func jsonEncode(arr api.IMagicArray, writer io.Writer, optInfo *api.JsonOptInfo)
 		return
 	}
 
-	iter := arr.Iter()
+	iter := arr.Iter_()
 kloop:
 	for k, v := iter.FirstKV(); k != nil; k, v = iter.NextKV() {
 		tagName := k.String()
